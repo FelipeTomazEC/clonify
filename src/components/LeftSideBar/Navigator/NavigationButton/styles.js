@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.button`
-  width: 200px;
+  width: 100%;
   height: 45px;
   display: flex;
   align-items: center;
