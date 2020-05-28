@@ -10,7 +10,7 @@ export const Container = styled.button`
   font-weight: bold;
   background-color: #000;
   border: none;
-
+  cursor: pointer;
   /*Little green dash on active button*/
   position: relative;
   ::before {
