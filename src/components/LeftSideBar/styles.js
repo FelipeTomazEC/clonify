@@ -7,13 +7,4 @@ export const Container = styled.aside`
   width: 220px;
   height: 100vh;
   padding-top: 15px;
-
-  nav {
-    display: flex;
-    flex-direction: column;
-  }
-
-  a {
-    text-decoration: none;
-  }
 `;
