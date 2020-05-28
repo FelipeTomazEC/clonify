@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import { Header } from "./components/Header";
+import { LeftSideBar } from "./components/LeftSideBar";
 
 function App() {
   const user = {
@@ -10,7 +11,8 @@ function App() {
   };
   return (
     <div className="App">
-      <Header user={user} />
+      <Header user={user} className="header" />
+      <LeftSideBar className="left" />
     </div>
   );
 }
