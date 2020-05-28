@@ -1,0 +1,36 @@
+import styled from "styled-components";
+
+export const Container = styled.button`
+  width: 200px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  color: ${(props) => (props.isActive ? "#fff" : "#b2afae")};
+  font-size: 0.9rem;
+  font-weight: bold;
+  background-color: #000;
+  border: none;
+
+  /*Little green dash on active button*/
+  position: relative;
+  ::before {
+    content: " ";
+    position: absolute;
+    height: 25px;
+    margin-right: 20px;
+    border-left: ${(props) => (props.isActive ? "#1db954 solid 4px" : "none")};
+  }
+
+  :active,
+  :focus {
+    outline: none;
+  }
+
+  :hover {
+    color: #fff;
+  }
+
+  .icon {
+    margin: auto 20px;
+  }
+`;
