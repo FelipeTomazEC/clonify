@@ -12,4 +12,8 @@ export const Container = styled.aside`
     display: flex;
     flex-direction: column;
   }
+
+  a {
+    text-decoration: none;
+  }
 `;
