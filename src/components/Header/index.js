@@ -4,9 +4,9 @@ import { Profile } from "./Profile";
 import { SearchBar } from "./SearchBar";
 import { Container } from "./styles";
 
-export function Header({ user }) {
+export function Header({ user, className }) {
   return (
-    <Container>
+    <Container className={className}>
       <button>
         <FaAngleLeft className="icon" size="25" />
       </button>
