@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Container = styled.header`
   width: 100%;
   height: 3em;
-  background-color: ${(props) => (props.isSticked ? "transparent" : "#000")};
+  background-color: ${(props) => (props.isSticked ? "transparent" : "#0c0c0b")};
   padding-left: 30px;
   position: sticky;
   top: 0;

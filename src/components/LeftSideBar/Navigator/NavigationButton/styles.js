@@ -8,7 +8,7 @@ export const Container = styled.button`
   color: ${(props) => (props.isActive ? "#fff" : "#b2afae")};
   font-size: 0.9rem;
   font-weight: bold;
-  background-color: #000;
+  background-color: #0c0c0b;
   border: none;
   cursor: pointer;
   /*Little green dash on active button*/
