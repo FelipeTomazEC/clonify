@@ -28,8 +28,10 @@ export function LeftSideBar({ className }) {
   return (
     <Container className={className}>
       <Navigator />
-      <SideList items={libraries} title="Your Library" />
-      <SideList items={playlists} title="Playlists" />
+      <div className="list-container">
+        <SideList items={libraries} title="Your Library" />
+        <SideList items={playlists} title="Playlists" />
+      </div>
     </Container>
   );
 }
