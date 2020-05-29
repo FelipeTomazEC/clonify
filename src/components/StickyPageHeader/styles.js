@@ -3,15 +3,17 @@ import styled from "styled-components";
 export const Container = styled.header`
   width: 100%;
   height: 3em;
-  background-color: ${(props) => (props.isSticked ? "transparent" : "#0c0c0b")};
-  padding-left: 30px;
+  background-color: ${(props) => (props.isSticked ? "#0c0c0c" : "transparent")};
   position: sticky;
   top: 0;
 
   h1 {
+    padding-left: 30px;
     color: #fff;
-    font-size: ${(props) => (props.isSticked ? 3 : 1.8)}em;
+    font-size: ${(props) => (props.isSticked ? 1.8 : 3)}em;
     font-weight: 800;
+    border-bottom: ${(props) =>
+      props.isSticked ? "rgba(178, 175, 174, 0.2) solid 1px" : "none"};
   }
 `;
 
