@@ -33,5 +33,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/faker": "^4.1.12",
+    "faker": "^4.1.0"
   }
 }
