@@ -8,7 +8,7 @@ export function StickyPageHeader({ title }) {
   return (
     <>
       <StickySentinel ref={ref} paddingTop={100} />
-      <Container isSticked={inView}>
+      <Container isSticked={!inView}>
         <h1>{title}</h1>
       </Container>
     </>
