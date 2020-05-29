@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./App.css";
 import { Header } from "./components/Header";
 import { LeftSideBar } from "./components/LeftSideBar";
+import { RightSideBar } from "./components/RightSideBar";
 import { Browse } from "./pages/Browse";
 import { Home } from "./pages/Home";
 import { Radio } from "./pages/Radio";
@@ -19,6 +20,7 @@ function App() {
       <div className="App">
         <Header user={user} className="header" />
         <LeftSideBar className="left" />
+        <RightSideBar className="right" />
         <Switch>
           <Route path="/home" component={Home} />
           <Route path="/browse" component={Browse} />
