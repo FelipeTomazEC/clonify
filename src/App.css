@@ -37,3 +37,11 @@ body,
 .content {
   grid-area: content;
 }
+
+*::-webkit-scrollbar,
+*::-webkit-scrollbar-button {
+  background-color: #181817;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #464545;
+}
