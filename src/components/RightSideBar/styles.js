@@ -4,7 +4,7 @@ export const Container = styled.aside`
   display: flex;
   flex-direction: column;
   background-color: #0c0c0b;
-  height: 100vh;
+  height: 100%;
   color: #b2afae;
 
   header {
