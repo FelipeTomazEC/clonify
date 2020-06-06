@@ -16,10 +16,11 @@ body,
 .App {
   display: grid;
   grid-template-columns: 220px auto 280px;
-  grid-template-rows: 48px calc(100vh - 50px);
+  grid-template-rows: 48px calc(100vh - 120px) 72px;
   grid-template-areas:
     "left header right"
-    "left content right";
+    "left content right"
+    "npb npb npb";
 }
 
 .header {
@@ -36,6 +37,10 @@ body,
 
 .content {
   grid-area: content;
+}
+
+.now-playing-bar {
+  grid-area: npb;
 }
 
 *::-webkit-scrollbar,
