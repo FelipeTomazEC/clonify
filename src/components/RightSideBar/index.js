@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FriendActivityCard } from "./FriendActivityCard";
 import { Container } from "./styles";
 
-export function RightSideBar({ className = "right" }) {
+export function RightSideBar() {
   const [friendsActivities, setFriendsActivities] = useState([]);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function RightSideBar({ className = "right" }) {
   }, []);
 
   return (
-    <Container className={className}>
+    <Container>
       <header>
         <h1>Friend Activity</h1>
       </header>
