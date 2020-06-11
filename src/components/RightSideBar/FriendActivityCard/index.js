@@ -4,7 +4,7 @@ import { RiAlbumLine } from "react-icons/ri";
 import { Container } from "./styles";
 
 export function FriendActivityCard({ activity }) {
-  const { avatar, name, album, artist, title } = activity;
+  const { friend, currentSong: song } = activity;
 
   return (
     <Container>
@@ -12,16 +12,16 @@ export function FriendActivityCard({ activity }) {
         <div className="icon">
           <FaPlay />
         </div>
-        <img className="avatar" src={avatar} alt="avatar" />
+        <img className="avatar" src={friend.avatarUrl} alt="avatar" />
       </div>
 
       <div className="info">
-        <strong>{name}</strong>
-        <span className="song-title">{title}</span>
-        <span className="artist">{artist}</span>
+        <strong>{friend.name}</strong>
+        <span className="song-title">{song.title}</span>
+        <span className="artist">{activity.currentArtistName}</span>
         <section className="song-album">
           <RiAlbumLine className="album-icon" size={20} />
-          <span>{album}</span>
+          <span>{activity.currentAlbumName}</span>
         </section>
       </div>
     </Container>
