@@ -3,14 +3,19 @@ import { AlbumCard } from "../../../components/AlbumCard";
 import { PlaylistCard } from "../../../components/PlaylistCard";
 import { StickyPageHeader } from "../../../components/StickyPageHeader";
 import { Album } from "../../../entities/album";
-import { getRecentPlayed } from "../../../services/spotify-web-api-service";
+import {
+  getRecentPlayed,
+  getUserPlaylists,
+} from "../../../services/spotify-web-api-service";
 import { Container } from "./styles";
 
 export function Home({ userId }) {
   const [recentPlayed, setRecentPlayed] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
 
   useEffect(() => {
     getRecentPlayed(userId).then((response) => setRecentPlayed(response));
+    getUserPlaylists(userId).then((playlists) => setPlaylists(playlists));
   }, [userId]);
 
   const makeCard = (item) =>
@@ -27,6 +32,14 @@ export function Home({ userId }) {
         <h2 className="label">Recently Played</h2>
         <ul>
           {recentPlayed.map((el) => (
+            <li key={el.id}>{makeCard(el)}</li>
+          ))}
+        </ul>
+      </section>
+      <section>
+        <h2 className="label">Your Playlists</h2>
+        <ul>
+          {playlists.map((el) => (
             <li key={el.id}>{makeCard(el)}</li>
           ))}
         </ul>
