@@ -1,15 +1,19 @@
 import axios from "axios";
 import faker from "faker";
+import sanitizeHTML from "sanitize-html";
+import { Album } from "../entities/album";
 import { FriendActivity } from "../entities/friend-activity";
 import { Playlist } from "../entities/playlist";
 import { Song } from "../entities/song";
 import { User } from "../entities/user";
 import { getToken } from "./authentication";
 
+const SPOTIFY_BASE_URL = "https://api.spotify.com/v1";
+
 const fetchFromApi = async (endpoint) =>
   axios
     .create({
-      baseURL: "https://api.spotify.com/v1",
+      baseURL: SPOTIFY_BASE_URL,
       headers: {
         Authorization: "Bearer " + getToken(),
       },
@@ -79,4 +83,62 @@ export async function getFriendsActivity() {
     });
 
   return fakeActivities;
+}
+
+export async function getRecentPlayed(userId) {
+  const contextsEndpoint = "/me/player/recently-played?limit=50";
+  const recentContextsUrls = await fetchFromApi(contextsEndpoint)
+    .then((data) => data.items)
+    .then((items) => items.map((el) => el.context))
+    .then((contexts) => contexts.flatMap((ctx) => (ctx ? [ctx.href] : [])))
+    .then((contexts) => Array.from(new Set(contexts)));
+
+  const recentPlayedData = await Promise.all(
+    recentContextsUrls.map((url) =>
+      fetchFromApi(url.replace(SPOTIFY_BASE_URL, "")).then(async (data) => {
+        const id = data.id;
+        const checkLikeEndpoint =
+          data.type === "album"
+            ? `/me/albums/contains?ids=${id}`
+            : `/playlists/${id}/followers/contains?ids=${userId}`;
+
+        const [isLiked] = await fetchFromApi(checkLikeEndpoint);
+        return {
+          ...data,
+          isLiked,
+        };
+      })
+    )
+  );
+
+  const recentPlayed = recentPlayedData.map((data) => {
+    const id = data.id;
+    const name = data.name;
+    const covers = data.images.map((el) => el.url);
+    const isLiked = data.isLiked;
+
+    if (data.type === "playlist") {
+      return new Playlist({
+        id,
+        name,
+        covers,
+        isLiked,
+        followersNumber: data.followers.total,
+        tracksIds: data.tracks.items.map((el) => el.track.id),
+        description: sanitizeHTML(data.description, { allowedTags: [] }),
+      });
+    }
+
+    return new Album({
+      covers,
+      id,
+      isLiked,
+      name,
+      artistsIds: data.artists.map((el) => el.id),
+      artistsNames: data.artists.map((el) => el.name),
+      tracksIds: data.tracks.items.map((el) => el.id),
+    });
+  });
+
+  return recentPlayed;
 }

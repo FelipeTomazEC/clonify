@@ -2,7 +2,11 @@ export function getSpotifyOAuthURL() {
   const endpoint = "https://accounts.spotify.com/authorize";
   const client_id = process.env.REACT_APP_CLIENT_ID;
   const redirect_uri = `${process.env.REACT_APP_OAUTH_CALLBACK_URL}/authentication-callback`;
-  const scopes = ["user-follow-read", "user-library-read"];
+  const scopes = [
+    "user-read-recently-played",
+    "user-follow-read",
+    "user-library-read",
+  ];
 
   return `${endpoint}/?client_id=${client_id}`
     .concat(`&redirect_uri=${redirect_uri}`)

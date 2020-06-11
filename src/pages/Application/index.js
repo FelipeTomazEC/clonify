@@ -15,7 +15,7 @@ import { Radio } from "./Radio";
 import { Container } from "./styles";
 
 export function Application() {
-  const [user, setUser] = useState({ name: "", avatarUrl: "", id: "" });
+  const [user, setUser] = useState({});
   const [playlists, setPlaylists] = useState([]);
   const [friendsActivities, setFriendsActivity] = useState([]);
 
@@ -72,7 +72,10 @@ export function Application() {
         </aside>
         <main className="content">
           <Switch>
-            <Route path="/application/home" component={Home} />
+            <Route
+              path="/application/home"
+              render={(props) => <Home {...props} userId={user.id} />}
+            />
             <Route path="/application/browse" component={Browse} />
             <Route path="/application/radio" component={Radio} />
           </Switch>

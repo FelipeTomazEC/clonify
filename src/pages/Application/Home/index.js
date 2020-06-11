@@ -1,24 +1,24 @@
-import faker from "faker";
 import React, { useEffect, useState } from "react";
+import { AlbumCard } from "../../../components/AlbumCard";
 import { PlaylistCard } from "../../../components/PlaylistCard";
 import { StickyPageHeader } from "../../../components/StickyPageHeader";
+import { Album } from "../../../entities/album";
+import { getRecentPlayed } from "../../../services/spotify-web-api-service";
 import { Container } from "./styles";
 
-export function Home() {
-  const [recentPlaylists, setRecentPlaylists] = useState([]);
+export function Home({ userId }) {
+  const [recentPlayed, setRecentPlayed] = useState([]);
 
   useEffect(() => {
-    const playlists = new Array(10).fill(1).map((_) => {
-      const coverUrl = faker.random.image();
-      const name = faker.lorem.words();
-      const description = faker.lorem.words(Math.floor(1 + Math.random() * 7));
-      const followersNumber = faker.random.number();
+    getRecentPlayed(userId).then((response) => setRecentPlayed(response));
+  }, [userId]);
 
-      return { coverUrl, name, description, followersNumber };
-    });
-
-    setRecentPlaylists(playlists);
-  }, []);
+  const makeCard = (item) =>
+    item instanceof Album ? (
+      <AlbumCard album={item} />
+    ) : (
+      <PlaylistCard playlist={item} />
+    );
 
   return (
     <Container>
@@ -26,50 +26,8 @@ export function Home() {
       <section>
         <h2 className="label">Recently Played</h2>
         <ul>
-          {recentPlaylists.map((el) => (
-            <li key={el.name}>
-              <PlaylistCard info={el} />
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section>
-        <h2 className="label">Hot Pop</h2>
-        <ul>
-          {recentPlaylists.map((el) => (
-            <li key={el.name}>
-              <PlaylistCard info={el} />
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section>
-        <h2 className="label">Your heavy rotation</h2>
-        <ul>
-          {recentPlaylists.map((el) => (
-            <li key={el.name}>
-              <PlaylistCard info={el} />
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section>
-        <h2 className="label">Your top podcasts</h2>
-        <ul>
-          {recentPlaylists.map((el) => (
-            <li key={el.name}>
-              <PlaylistCard info={el} />
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section>
-        <h2 className="label">Sleep</h2>
-        <ul>
-          {recentPlaylists.map((el) => (
-            <li key={el.name}>
-              <PlaylistCard info={el} />
-            </li>
+          {recentPlayed.map((el) => (
+            <li key={el.id}>{makeCard(el)}</li>
           ))}
         </ul>
       </section>
