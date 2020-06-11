@@ -1,7 +1,7 @@
 import faker from "faker";
 import React, { useEffect, useState } from "react";
-import { RadioCard } from "../../components/RadioCard";
-import { StickyPageHeader } from "../../components/StickyPageHeader";
+import { RadioCard } from "../../../components/RadioCard";
+import { StickyPageHeader } from "../../../components/StickyPageHeader";
 import { Container } from "./styles";
 
 export function Radio() {

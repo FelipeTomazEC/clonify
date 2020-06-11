@@ -1,7 +1,7 @@
 import faker from "faker";
 import React, { useEffect, useState } from "react";
-import { PlaylistCard } from "../../components/PlaylistCard";
-import { StickyPageHeader } from "../../components/StickyPageHeader";
+import { PlaylistCard } from "../../../components/PlaylistCard";
+import { StickyPageHeader } from "../../../components/StickyPageHeader";
 import { Container } from "./styles";
 
 export function Home() {

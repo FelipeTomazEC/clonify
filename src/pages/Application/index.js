@@ -9,9 +9,9 @@ import {
   getFriendsActivity,
   getUserPlaylists,
 } from "../../services/spotify-web-api-service";
-import { Browse } from "../Browse";
-import { Home } from "../Home";
-import { Radio } from "../Radio";
+import { Browse } from "./Browse";
+import { Home } from "./Home";
+import { Radio } from "./Radio";
 import { Container } from "./styles";
 
 export function Application() {
