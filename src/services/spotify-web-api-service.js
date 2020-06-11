@@ -34,11 +34,22 @@ export async function getUserPlaylists(userId) {
   const data = await fetchFromApi(`/users/${userId}/playlists`);
   const playlistsData = Array.from(data.items);
 
-  return playlistsData.map(({ images, name, tracks }) => {
-    const imagesUrl = images.map((img) => img.url);
-    const tracksIds = tracks;
-    return new Playlist({ name, images: imagesUrl, tracksIds });
-  });
+  return playlistsData.map(
+    ({ images, name, tracks, id, description, followersNumber }) => {
+      const imagesUrl = images.map((img) => img.url);
+      const tracksIds = tracks;
+
+      return new Playlist({
+        name,
+        covers: imagesUrl,
+        tracksIds,
+        id,
+        description: sanitizeHTML(description, { allowedTags: [] }),
+        followersNumber,
+        isLiked: true,
+      });
+    }
+  );
 }
 
 export async function getFriendsActivity() {
