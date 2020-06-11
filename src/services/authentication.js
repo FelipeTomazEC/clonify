@@ -7,7 +7,7 @@ export function getSpotifyOAuthURL() {
   return `${endpoint}/?client_id=${client_id}`
     .concat(`&redirect_uri=${redirect_uri}`)
     .concat(`&response_type=token`)
-    .concat(`&scopes=${encodeURIComponent(scopes.join(" "))}`);
+    .concat(`&scope=${encodeURIComponent(scopes)}`);
 }
 
 export function setSession(accessToken, tokenTimeToLive, callback) {
