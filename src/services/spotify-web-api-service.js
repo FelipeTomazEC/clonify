@@ -4,6 +4,7 @@ import sanitizeHTML from "sanitize-html";
 import { Album } from "../entities/album";
 import { FriendActivity } from "../entities/friend-activity";
 import { Playlist } from "../entities/playlist";
+import { Podcast } from "../entities/podcast";
 import { Song } from "../entities/song";
 import { User } from "../entities/user";
 import { getToken } from "./authentication";
@@ -101,7 +102,13 @@ export async function getRecentPlayed(userId) {
   const recentContextsUrls = await fetchFromApi(contextsEndpoint)
     .then((data) => data.items)
     .then((items) => items.map((el) => el.context))
-    .then((contexts) => contexts.flatMap((ctx) => (ctx ? [ctx.href] : [])))
+    .then((contexts) =>
+      contexts.flatMap((ctx) =>
+        ctx && (ctx.type === "album" || ctx.type === "playlist")
+          ? [ctx.href]
+          : []
+      )
+    )
     .then((contexts) => Array.from(new Set(contexts)));
 
   const recentPlayedData = await Promise.all(
@@ -152,4 +159,22 @@ export async function getRecentPlayed(userId) {
   });
 
   return recentPlayed;
+}
+
+export async function getUserPodcasts() {
+  const endpoint = "/me/shows";
+  const podcastsData = await fetchFromApi(endpoint).then((data) =>
+    data.items.map((el) => el.show)
+  );
+
+  return podcastsData.map(
+    (data) =>
+      new Podcast({
+        covers: data.images.map((el) => el.url),
+        description: data.description,
+        id: data.id,
+        name: data.name,
+        publisher: data.publisher,
+      })
+  );
 }

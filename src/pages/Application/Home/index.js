@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { AlbumCard } from "../../../components/AlbumCard";
 import { PlaylistCard } from "../../../components/PlaylistCard";
+import { PodcastCard } from "../../../components/PodcastCard";
 import { StickyPageHeader } from "../../../components/StickyPageHeader";
 import { Album } from "../../../entities/album";
 import {
   getRecentPlayed,
   getUserPlaylists,
+  getUserPodcasts,
 } from "../../../services/spotify-web-api-service";
 import { Container } from "./styles";
 
 export function Home({ userId }) {
   const [recentPlayed, setRecentPlayed] = useState([]);
   const [playlists, setPlaylists] = useState([]);
+  const [podcasts, setPodcasts] = useState([]);
+
+  useEffect(() => {
+    getUserPodcasts().then((podcasts) => {
+      console.log(podcasts);
+      setPodcasts(podcasts);
+    });
+  }, []);
 
   useEffect(() => {
     getRecentPlayed(userId).then((response) => setRecentPlayed(response));
@@ -41,6 +51,16 @@ export function Home({ userId }) {
         <ul>
           {playlists.map((el) => (
             <li key={el.id}>{makeCard(el)}</li>
+          ))}
+        </ul>
+      </section>
+      <section>
+        <h2 className="label">Your Top Podcasts</h2>
+        <ul>
+          {podcasts.map((el) => (
+            <li key={el.id}>
+              <PodcastCard podcast={el} />
+            </li>
           ))}
         </ul>
       </section>

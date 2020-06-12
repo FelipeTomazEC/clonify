@@ -33,7 +33,7 @@ export const Container = styled.main`
 
       li {
         margin: 0 11px;
-
+        max-width: 180px;
         :first-child {
           margin-left: 0px;
         }
