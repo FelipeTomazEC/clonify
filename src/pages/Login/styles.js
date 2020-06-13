@@ -52,14 +52,14 @@ export const Container = styled.div`
         font-size: 1.4em;
       }
     }
+  }
 
-    .copyright {
-      text-align: center;
+  .copyright {
+    text-align: center;
 
-      .text {
-        color: #191414;
-        font-size: 1.2em;
-      }
+    .text {
+      color: #191414;
+      font-size: 1.2em;
     }
   }
 
