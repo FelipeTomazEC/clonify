@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { TrackQueueContext } from "../../providers/TrackQueueContext";
 import { AppControls } from "./AppControls";
 import { Container } from "./styles";
 import { TrackControls } from "./TrackControls";
@@ -7,7 +8,8 @@ import { TrackDetails } from "./TrackDetails";
 const PLAY_NEXT_TRACK = 1;
 const PLAY_PREVIOUS_TRACK = 2;
 
-export function NowPlayingBar({ queue = [] }) {
+export function NowPlayingBar() {
+  const [queue] = useContext(TrackQueueContext);
   const [currentTrack, setCurrentTrack] = useState(queue[0]);
 
   function changeTrack(action) {
