@@ -4,10 +4,8 @@ import { FriendsActivityFeed } from "../../components/FriendsActivityFeed";
 import { Header } from "../../components/Header";
 import { LeftSideBar } from "../../components/LeftSideBar";
 import { NowPlayingBar } from "../../components/NowPlayingBar";
-import {
-  getCurrentUser,
-  getUserPlaylists,
-} from "../../services/spotify-web-api-service";
+import { UserPlaylistsProvider } from "../../providers/UserPlaylistsContext";
+import { getCurrentUser } from "../../services/spotify-web-api-service";
 import { Browse } from "./Browse";
 import { Home } from "./Home";
 import { Radio } from "./Radio";
@@ -15,21 +13,12 @@ import { Container } from "./styles";
 
 export function Application() {
   const [user, setUser] = useState({});
-  const [playlists, setPlaylists] = useState([]);
 
   useEffect(() => {
     getCurrentUser()
       .then((user) => setUser(user))
       .catch((err) => console.error(err.message));
   }, []);
-
-  useEffect(() => {
-    if (user.id) {
-      getUserPlaylists(user.id)
-        .then((playlists) => setPlaylists(playlists))
-        .catch((err) => console.error(err));
-    }
-  }, [user]);
 
   const queue = [
     {
@@ -59,7 +48,9 @@ export function Application() {
           <Header user={user} />
         </header>
         <aside className="left">
-          <LeftSideBar playlists={playlists} />
+          <UserPlaylistsProvider userId={user.id}>
+            <LeftSideBar />
+          </UserPlaylistsProvider>
         </aside>
         <aside className="right">
           <FriendsActivityFeed />
@@ -68,7 +59,11 @@ export function Application() {
           <Switch>
             <Route
               path="/application/home"
-              render={(props) => <Home {...props} userId={user.id} />}
+              render={(props) => (
+                <UserPlaylistsProvider userId={user.id}>
+                  <Home {...props} userId={user.id} />
+                </UserPlaylistsProvider>
+              )}
             />
             <Route path="/application/browse" component={Browse} />
             <Route path="/application/radio" component={Radio} />

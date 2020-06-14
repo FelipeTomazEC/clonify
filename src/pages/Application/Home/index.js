@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AlbumCard } from "../../../components/AlbumCard";
 import { PlaylistCard } from "../../../components/PlaylistCard";
 import { PodcastCard } from "../../../components/PodcastCard";
 import { StickyPageHeader } from "../../../components/StickyPageHeader";
 import { Album } from "../../../entities/album";
+import { UserPlaylistsContext } from "../../../providers/UserPlaylistsContext";
 import {
   getRecentPlayed,
-  getUserPlaylists,
   getUserPodcasts,
 } from "../../../services/spotify-web-api-service";
 import { Container } from "./styles";
 
 export function Home({ userId }) {
   const [recentPlayed, setRecentPlayed] = useState([]);
-  const [playlists, setPlaylists] = useState([]);
   const [podcasts, setPodcasts] = useState([]);
+  const playlists = useContext(UserPlaylistsContext);
 
   useEffect(() => {
     getUserPodcasts().then((podcasts) => {
@@ -25,7 +25,6 @@ export function Home({ userId }) {
 
   useEffect(() => {
     getRecentPlayed(userId).then((response) => setRecentPlayed(response));
-    getUserPlaylists(userId).then((playlists) => setPlaylists(playlists));
   }, [userId]);
 
   const makeCard = (item) =>
