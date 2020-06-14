@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { FriendsActivityFeed } from "../../components/FriendsActivityFeed";
 import { Header } from "../../components/Header";
 import { LeftSideBar } from "../../components/LeftSideBar";
 import { NowPlayingBar } from "../../components/NowPlayingBar";
-import { RightSideBar } from "../../components/RightSideBar";
 import {
   getCurrentUser,
-  getFriendsActivity,
   getUserPlaylists,
 } from "../../services/spotify-web-api-service";
 import { Browse } from "./Browse";
@@ -17,16 +16,11 @@ import { Container } from "./styles";
 export function Application() {
   const [user, setUser] = useState({});
   const [playlists, setPlaylists] = useState([]);
-  const [friendsActivities, setFriendsActivity] = useState([]);
 
   useEffect(() => {
     getCurrentUser()
       .then((user) => setUser(user))
       .catch((err) => console.error(err.message));
-
-    getFriendsActivity()
-      .then((activities) => setFriendsActivity(activities))
-      .catch((err) => console.error(err));
   }, []);
 
   useEffect(() => {
@@ -68,7 +62,7 @@ export function Application() {
           <LeftSideBar playlists={playlists} />
         </aside>
         <aside className="right">
-          <RightSideBar friendsActivities={friendsActivities} />
+          <FriendsActivityFeed />
         </aside>
         <main className="content">
           <Switch>
