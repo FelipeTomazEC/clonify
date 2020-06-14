@@ -44,34 +44,30 @@ export function Application() {
   return (
     <BrowserRouter>
       <Container>
-        <header className="header">
-          <Header user={user} />
-        </header>
-        <aside className="left">
-          <UserPlaylistsProvider userId={user.id}>
+        <UserPlaylistsProvider userId={user.id}>
+          <header className="header">
+            <Header user={user} />
+          </header>
+          <aside className="left">
             <LeftSideBar />
-          </UserPlaylistsProvider>
-        </aside>
-        <aside className="right">
-          <FriendsActivityFeed />
-        </aside>
-        <main className="content">
-          <Switch>
-            <Route
-              path="/application/home"
-              render={(props) => (
-                <UserPlaylistsProvider userId={user.id}>
-                  <Home {...props} userId={user.id} />
-                </UserPlaylistsProvider>
-              )}
-            />
-            <Route path="/application/browse" component={Browse} />
-            <Route path="/application/radio" component={Radio} />
-          </Switch>
-        </main>
-        <footer className="now-playing-bar">
-          <NowPlayingBar queue={queue} />
-        </footer>
+          </aside>
+          <aside className="right">
+            <FriendsActivityFeed />
+          </aside>
+          <main className="content">
+            <Switch>
+              <Route
+                path="/application/home"
+                render={(props) => <Home {...props} userId={user.id} />}
+              />
+              <Route path="/application/browse" component={Browse} />
+              <Route path="/application/radio" component={Radio} />
+            </Switch>
+          </main>
+          <footer className="now-playing-bar">
+            <NowPlayingBar queue={queue} />
+          </footer>
+        </UserPlaylistsProvider>
       </Container>
     </BrowserRouter>
   );
