@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaPlay } from "react-icons/fa";
 import { RiAlbumLine } from "react-icons/ri";
+import { TrackQueueContext } from "../../../providers/TrackQueueContext";
+import { getAlbumTracks } from "../../../services/spotify-web-api-service";
 import { Container } from "./styles";
 
 export function FriendActivityCard({ activity }) {
   const { friend, currentSong: song } = activity;
+  const [, setQueue] = useContext(TrackQueueContext);
+
+  const handlePlayClick = async () => {
+    const { albumId } = song;
+    getAlbumTracks(albumId)
+      .then((tracks) => setQueue(tracks))
+      .catch((err) => console.error(err));
+  };
 
   return (
     <Container>
-      <div className="avatar-wrapper">
+      <div className="avatar-wrapper" onClick={handlePlayClick}>
         <div className="icon">
           <FaPlay />
         </div>
