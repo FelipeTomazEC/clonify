@@ -2,10 +2,12 @@ import axios from "axios";
 import faker from "faker";
 import sanitizeHTML from "sanitize-html";
 import { Album } from "../entities/album";
+import { Artist } from "../entities/artist";
 import { FriendActivity } from "../entities/friend-activity";
 import { Playlist } from "../entities/playlist";
 import { Podcast } from "../entities/podcast";
 import { Song } from "../entities/song";
+import { Track } from "../entities/track";
 import { User } from "../entities/user";
 import { getToken } from "./authentication";
 
@@ -159,6 +161,38 @@ export async function getRecentPlayed(userId) {
   });
 
   return recentPlayed;
+}
+
+export async function getAlbumTracks(albumId) {
+  const data = await fetchFromApi(`/albums/${albumId}`);
+  const artistsIds = data.artists.map((a) => a.id).join(",");
+  const artists = await fetchFromApi(`/artists?ids=${artistsIds}`)
+    .then((res) => res.artists)
+    .then((artistsData) =>
+      artistsData.map(
+        (data) =>
+          new Artist({
+            avatar: data.images[0].url,
+            id: data.id,
+            name: data.name,
+          })
+      )
+    );
+
+  const tracks = data.tracks.items.map(
+    (el) =>
+      new Track({
+        id: el.id,
+        sourceUrl: el.preview_url,
+        title: el.name,
+        albumCover: data.images[0].url,
+        albumId: data.id,
+        artists,
+        albumName: data.name,
+      })
+  );
+
+  return tracks;
 }
 
 export async function getUserPodcasts() {
