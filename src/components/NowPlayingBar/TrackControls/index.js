@@ -4,25 +4,33 @@ import { FaRandom, FaRegPauseCircle, FaRegPlayCircle } from "react-icons/fa";
 import { FiRepeat } from "react-icons/fi";
 import { Container } from "./styles";
 
-export function TrackControls({ sourceUrl, handlePrevClick, handleNextClick }) {
+export function TrackControls({
+  audioTrack,
+  handlePrevClick,
+  handleNextClick,
+  handlePlayPauseClick,
+}) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [track, setTrack] = useState(new Audio(sourceUrl));
+
+  // useEffect(() => {
+  //   const newAudio = new Audio(sourceUrl);
+  //   setTrack((prev) => {
+  //     prev.pause();
+  //     return newAudio;
+  //   });
+
+  //   if (autoPlay) newAudio.play();
+  // }, [autoPlay, sourceUrl]);
 
   useEffect(() => {
-    setTrack((prev) => {
-      prev.pause();
+    audioTrack.ontimeupdate = () => setCurrentTime(audioTrack.currentTime);
+    audioTrack.onloadedmetadata = () => setDuration(audioTrack.duration);
+  }, [audioTrack]);
 
-      return new Audio(sourceUrl);
-    });
-  }, [sourceUrl]);
-
-  useEffect(() => {
-    track.ontimeupdate = () => setCurrentTime(track.currentTime);
-    track.onloadedmetadata = () => setDuration(track.duration);
-  }, [track]);
-
-  const PlayPauseButtonIcon = track.paused ? FaRegPlayCircle : FaRegPauseCircle;
+  const PlayPauseButtonIcon = audioTrack.paused
+    ? FaRegPlayCircle
+    : FaRegPauseCircle;
 
   const getTimeInMinutes = (timeInSeconds) => {
     const seconds = Math.round(timeInSeconds) % 60;
@@ -31,19 +39,13 @@ export function TrackControls({ sourceUrl, handlePrevClick, handleNextClick }) {
     return `${minutes}:${"".concat(seconds).padStart(2, 0)}`.split(".")[0];
   };
 
-  function playOrPause() {
-    if (track.paused) {
-      track.play();
-    } else track.pause();
-  }
-
   function changeProgress(e) {
     const newProgress = e.target.value;
-    track.currentTime = newProgress;
+    audioTrack.currentTime = newProgress;
   }
 
   function restartFromTheBeginning() {
-    track.currentTime = 0;
+    audioTrack.currentTime = 0;
   }
 
   return (
@@ -58,7 +60,7 @@ export function TrackControls({ sourceUrl, handlePrevClick, handleNextClick }) {
         >
           <BsSkipStartFill size={20} />
         </button>
-        <button className="play-button" onClick={playOrPause}>
+        <button className="play-button" onClick={handlePlayPauseClick}>
           <PlayPauseButtonIcon size={32} />
         </button>
         <button onClick={handleNextClick}>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TrackQueueContext } from "../../providers/TrackQueueContext";
 import { AppControls } from "./AppControls";
 import { Container } from "./styles";
@@ -11,6 +11,24 @@ const PLAY_PREVIOUS_TRACK = 2;
 export function NowPlayingBar() {
   const [queue] = useContext(TrackQueueContext);
   const [currentTrack, setCurrentTrack] = useState(queue[0]);
+  const [currentAudioTrack, setCurrentAudioTrack] = useState(
+    new Audio(queue[0].sourceUrl)
+  );
+
+  useEffect(() => {
+    setCurrentTrack(queue[0]);
+  }, [queue]);
+
+  useEffect(() => {
+    const newAudio = new Audio(currentTrack.sourceUrl);
+
+    setCurrentAudioTrack((prev) => {
+      const isPlaying = !prev.paused;
+      prev.pause();
+      if (isPlaying) newAudio.play();
+      return newAudio;
+    });
+  }, [currentTrack]);
 
   function changeTrack(action) {
     let newTrackIndex;
@@ -31,20 +49,29 @@ export function NowPlayingBar() {
     setCurrentTrack(track);
   }
 
+  function handlePlayPauseClick() {
+    if (!currentAudioTrack.paused) {
+      currentAudioTrack.pause();
+    } else {
+      currentAudioTrack.play();
+    }
+  }
+
   console.log("Rendering...");
 
   return (
     <Container>
       <TrackDetails
-        isLiked={currentTrack.isLiked}
-        artist={currentTrack.artist}
-        cover={currentTrack.cover}
+        isLiked={false}
+        artist={currentTrack.artists[0].name}
+        cover={currentTrack.albumCover}
         title={currentTrack.title}
       />
       <TrackControls
-        sourceUrl={currentTrack.sourceUrl}
+        audioTrack={currentAudioTrack}
         handleNextClick={() => changeTrack(PLAY_NEXT_TRACK)}
         handlePrevClick={() => changeTrack(PLAY_PREVIOUS_TRACK)}
+        handlePlayPauseClick={handlePlayPauseClick}
       />
       <AppControls />
     </Container>
