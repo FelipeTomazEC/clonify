@@ -9,7 +9,7 @@ export function FriendsActivityFeed() {
   useEffect(() => {
     getFriendsActivity()
       .then((activities) => setActivities(activities))
-      .catch((err) => console.err(err));
+      .catch((err) => console.error(err));
   }, []);
 
   return (
