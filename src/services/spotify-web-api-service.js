@@ -6,7 +6,6 @@ import { Artist } from "../entities/artist";
 import { FriendActivity } from "../entities/friend-activity";
 import { Playlist } from "../entities/playlist";
 import { Podcast } from "../entities/podcast";
-import { Song } from "../entities/song";
 import { Track } from "../entities/track";
 import { User } from "../entities/user";
 import { getToken } from "./authentication";
@@ -77,21 +76,26 @@ export async function getFriendsActivity() {
     (response) => response.items
   );
 
+  console.log("SOME TRACK", fullTracksData[0].track);
+
   const fakeActivities = fullTracksData
     .map((data) => data.track)
     .map((track) => {
       const friend = getFakeFriend();
-      const { name: title, preview_url: sourceUrl } = track;
-      const { album: albumData } = track;
-      const { name: currentAlbumName, id: albumId } = albumData;
-      const { id: artistId, name: currentArtistName } = albumData.artists[0];
-      const currentSong = new Song({ title, artistId, albumId, sourceUrl });
-      const activity = new FriendActivity({
-        friend,
-        currentAlbumName,
-        currentSong,
-        currentArtistName,
+      const { name: title, preview_url: sourceUrl, id, album } = track;
+      const currentSong = new Track({
+        title,
+        albumId: album.id,
+        sourceUrl,
+        id,
+        albumCover: album.images[0].url,
+        albumName: album.name,
+        artists: album.artists.map(
+          (data) => new Artist({ id: data.id, name: data.name })
+        ),
       });
+
+      const activity = new FriendActivity({ friend, currentSong });
 
       return activity;
     });

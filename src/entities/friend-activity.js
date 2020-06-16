@@ -1,8 +1,6 @@
 export class FriendActivity {
-  constructor({ friend, currentSong, currentAlbumName, currentArtistName }) {
+  constructor({ friend, currentSong }) {
     this.friend = friend;
     this.currentSong = currentSong;
-    this.currentAlbumName = currentAlbumName;
-    this.currentArtistName = currentArtistName;
   }
 }
