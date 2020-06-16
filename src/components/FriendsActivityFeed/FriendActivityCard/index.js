@@ -10,11 +10,16 @@ export function FriendActivityCard({ activity }) {
   const [, setQueue] = useContext(TrackQueueContext);
 
   const handlePlayClick = async () => {
-    const { albumId } = song;
-    getAlbumTracks(albumId)
-      .then((tracks) => setQueue(tracks))
-      .catch((err) => console.error(err));
+    try {
+      const tracks = await getAlbumTracks(song.albumId);
+      const firstTrack = tracks.find((t) => t.id === song.id);
+      setQueue([firstTrack, ...tracks]);
+    } catch (err) {
+      console.error(err);
+    }
   };
+
+  const artistsName = song.artists.map((a) => a.name).join(", ");
 
   return (
     <Container>
@@ -28,10 +33,10 @@ export function FriendActivityCard({ activity }) {
       <div className="info">
         <strong>{friend.name}</strong>
         <span className="song-title">{song.title}</span>
-        <span className="artist">{activity.currentArtistName}</span>
+        <span className="artist">{artistsName}</span>
         <section className="song-album">
           <RiAlbumLine className="album-icon" size={20} />
-          <span>{activity.currentAlbumName}</span>
+          <span>{song.albumName}</span>
         </section>
       </div>
     </Container>
