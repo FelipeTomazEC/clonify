@@ -73,7 +73,7 @@ export function NowPlayingBar() {
         handlePrevClick={() => changeTrack(PLAY_PREVIOUS_TRACK)}
         handlePlayPauseClick={handlePlayPauseClick}
       />
-      <AppControls />
+      <AppControls audio={currentAudioTrack} />
     </Container>
   );
 }
