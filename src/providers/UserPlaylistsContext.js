@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import { getUserPlaylists } from "../services/spotify-web-api-service";
+import { getUserPlaylistsFromAPI } from "../services/get-user-playlists-from-api";
 
 export const UserPlaylistsContext = createContext();
 
@@ -7,7 +7,7 @@ export function UserPlaylistsProvider({ userId, children }) {
   const [playlists, setPlaylists] = useState([]);
 
   useEffect(() => {
-    getUserPlaylists(userId)
+    getUserPlaylistsFromAPI(userId)
       .then((playlists) => setPlaylists(playlists))
       .catch((err) => console.error(err));
   }, [userId]);

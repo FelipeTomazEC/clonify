@@ -5,10 +5,8 @@ import { PodcastCard } from "../../../components/PodcastCard";
 import { StickyPageHeader } from "../../../components/StickyPageHeader";
 import { Album } from "../../../entities/album";
 import { UserPlaylistsContext } from "../../../providers/UserPlaylistsContext";
-import {
-  getRecentPlayed,
-  getUserPodcasts,
-} from "../../../services/spotify-web-api-service";
+import { getRecentPlayedFromAPI } from "../../../services/get-recent-played-from-api";
+import { getUserFollowedPodcasts } from "../../../services/get-user-followed-podcasts";
 import { Container } from "./styles";
 
 export function Home({ userId }) {
@@ -17,15 +15,9 @@ export function Home({ userId }) {
   const playlists = useContext(UserPlaylistsContext);
 
   useEffect(() => {
-    getUserPodcasts().then((podcasts) => {
-      console.log(podcasts);
-      setPodcasts(podcasts);
-    });
+    getUserFollowedPodcasts().then((podcasts) => setPodcasts(podcasts));
+    getRecentPlayedFromAPI().then((response) => setRecentPlayed(response));
   }, []);
-
-  useEffect(() => {
-    getRecentPlayed(userId).then((response) => setRecentPlayed(response));
-  }, [userId]);
 
   const makeCard = (item) =>
     item instanceof Album ? (

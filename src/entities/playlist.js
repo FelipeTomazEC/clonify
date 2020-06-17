@@ -1,17 +1,17 @@
 export class Playlist {
   constructor({
     id,
-    tracksIds,
+    tracks,
     name,
-    covers,
+    cover,
     description,
     followersNumber,
     isLiked,
   }) {
     this.id = id;
-    this.tracksIds = tracksIds;
+    this.tracks = tracks;
     this.name = name;
-    this.covers = covers;
+    this.cover = cover;
     this.description = description;
     this.followersNumber = followersNumber;
     this.isLiked = isLiked;

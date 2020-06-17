@@ -6,7 +6,7 @@ import { LeftSideBar } from "../../components/LeftSideBar";
 import { NowPlayingBar } from "../../components/NowPlayingBar";
 import { TrackQueueProvider } from "../../providers/TrackQueueContext";
 import { UserPlaylistsProvider } from "../../providers/UserPlaylistsContext";
-import { getCurrentUser } from "../../services/spotify-web-api-service";
+import { getCurrentUserInfoFromAPI } from "../../services/get-current-user-data-from-api";
 import { Browse } from "./Browse";
 import { Home } from "./Home";
 import { Radio } from "./Radio";
@@ -16,7 +16,7 @@ export function Application() {
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    getCurrentUser()
+    getCurrentUserInfoFromAPI()
       .then((user) => setUser(user))
       .catch((err) => console.error(err.message));
   }, []);
