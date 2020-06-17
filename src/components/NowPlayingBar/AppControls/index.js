@@ -1,19 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { BsVolumeUp } from "react-icons/bs";
+import { BsVolumeMute, BsVolumeUp } from "react-icons/bs";
 import { FaExpandAlt } from "react-icons/fa";
 import { MdImportantDevices, MdQueueMusic } from "react-icons/md";
 import { Container } from "./styles";
 
 export function AppControls({ audio }) {
   const [volume, setVolume] = useState(0.5);
+  const [muted, setMuted] = useState(false);
+
+  const VolumeIcon = volume === 0 || muted ? BsVolumeMute : BsVolumeUp;
 
   useEffect(() => {
     audio.volume = volume;
   }, [audio, volume]);
 
+  useEffect(() => {
+    audio.volume = muted ? 0 : volume;
+  }, [muted, audio, volume]);
+
   function changeVolume(e) {
     const volume = e.target.value / 100;
     setVolume(volume);
+
+    if (volume > 0) {
+      setMuted(false);
+    }
+  }
+
+  function muteOrUnmute() {
+    setMuted(!muted);
   }
 
   return (
@@ -24,8 +39,8 @@ export function AppControls({ audio }) {
       <button>
         <MdImportantDevices size={23} />
       </button>
-      <button>
-        <BsVolumeUp size={25} />
+      <button onClick={muteOrUnmute}>
+        <VolumeIcon size={25} />
       </button>
       <input
         type="range"
@@ -33,7 +48,7 @@ export function AppControls({ audio }) {
         className="volume-slider"
         min={0}
         max={100}
-        defaultValue={volume * 100}
+        value={volume * 100}
         onChange={changeVolume}
       />
       <button>
