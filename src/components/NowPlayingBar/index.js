@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { TrackQueueContext } from "../../providers/TrackQueueContext";
+import { TrackQueueContext } from "../../providers/track-queue-context";
 import { AppControls } from "./AppControls";
 import { Container } from "./styles";
 import { TrackControls } from "./TrackControls";

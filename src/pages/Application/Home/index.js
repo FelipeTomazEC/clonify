@@ -4,7 +4,7 @@ import { PlaylistCard } from "../../../components/PlaylistCard";
 import { PodcastCard } from "../../../components/PodcastCard";
 import { StickyPageHeader } from "../../../components/StickyPageHeader";
 import { Album } from "../../../entities/album";
-import { UserPlaylistsContext } from "../../../providers/UserPlaylistsContext";
+import { UserPlaylistsContext } from "../../../providers/user-playlists-context";
 import { getRecentPlayedFromAPI } from "../../../services/get-recent-played-from-api";
 import { getUserFollowedPodcasts } from "../../../services/get-user-followed-podcasts";
 import { Container } from "./styles";

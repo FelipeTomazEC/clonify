@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { UserPlaylistsContext } from "../../providers/UserPlaylistsContext";
+import { UserPlaylistsContext } from "../../providers/user-playlists-context";
 import { Navigator } from "./Navigator";
 import { SideList } from "./SideList";
 import { Container } from "./styles";

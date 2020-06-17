@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { TrackQueueContext } from "../../providers/TrackQueueContext";
+import { TrackQueueContext } from "../../providers/track-queue-context";
 import { PlayableCard } from "../PlayableCard";
 import { Container } from "./styles";
 

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { FaPlay } from "react-icons/fa";
 import { RiAlbumLine } from "react-icons/ri";
-import { TrackQueueContext } from "../../../providers/TrackQueueContext";
+import { TrackQueueContext } from "../../../providers/track-queue-context";
 import { getAlbumTracks } from "../../../services/spotify-web-api-service";
 import { Container } from "./styles";
 
