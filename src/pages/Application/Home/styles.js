@@ -1,16 +1,12 @@
 import styled from "styled-components";
 
-export const Container = styled.main`
+export const Container = styled.div`
   max-height: 100%;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   background-color: rgba(12, 12, 11, 0.95);
   overflow-x: hidden;
-
-  header {
-    padding-left: 30px;
-  }
 
   section {
     margin: 15px 15px 0px 30px;
@@ -41,7 +37,7 @@ export const Container = styled.main`
     }
 
     :nth-of-type(1) {
-      margin-top: 60px;
+      margin-top: 50px;
     }
   }
 `;

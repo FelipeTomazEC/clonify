@@ -28,16 +28,18 @@ export function Radio() {
   return (
     <Container>
       <StickyPageHeader title="Radio" />
-      <section>
-        <h2 className="label">Recommended Stations</h2>
-        <ul>
-          {radioStations.map((el) => (
-            <li key={el.name}>
-              <RadioCard radio={el} />
-            </li>
-          ))}
-        </ul>
-      </section>
+      <main>
+        <section>
+          <h2 className="label">Recommended Stations</h2>
+          <ul>
+            {radioStations.map((el) => (
+              <li key={el.name}>
+                <RadioCard radio={el} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
     </Container>
   );
 }
