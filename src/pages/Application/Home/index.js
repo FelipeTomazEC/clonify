@@ -29,32 +29,34 @@ export function Home({ userId }) {
   return (
     <Container>
       <StickyPageHeader title="Home" />
-      <section>
-        <h2 className="label">Recently Played</h2>
-        <ul>
-          {recentPlayed.map((el) => (
-            <li key={el.id}>{makeCard(el)}</li>
-          ))}
-        </ul>
-      </section>
-      <section>
-        <h2 className="label">Your Playlists</h2>
-        <ul>
-          {playlists.map((el) => (
-            <li key={el.id}>{makeCard(el)}</li>
-          ))}
-        </ul>
-      </section>
-      <section>
-        <h2 className="label">Your Top Podcasts</h2>
-        <ul>
-          {podcasts.map((el) => (
-            <li key={el.id}>
-              <PodcastCard podcast={el} />
-            </li>
-          ))}
-        </ul>
-      </section>
+      <main>
+        <section>
+          <h2 className="label">Recently Played</h2>
+          <ul>
+            {recentPlayed.map((el) => (
+              <li key={el.id}>{makeCard(el)}</li>
+            ))}
+          </ul>
+        </section>
+        <section>
+          <h2 className="label">Your Playlists</h2>
+          <ul>
+            {playlists.map((el) => (
+              <li key={el.id}>{makeCard(el)}</li>
+            ))}
+          </ul>
+        </section>
+        <section>
+          <h2 className="label">Your Top Podcasts</h2>
+          <ul>
+            {podcasts.map((el) => (
+              <li key={el.id}>
+                <PodcastCard podcast={el} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
     </Container>
   );
 }
