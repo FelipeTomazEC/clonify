@@ -16,7 +16,7 @@ function App() {
           path="/authentication-callback"
           component={ConfirmAuthentication}
         />
-        <PrivateRoute path="/application" component={Application} />
+        <PrivateRoute path="/home" component={Application} />
       </Switch>
     </BrowserRouter>
   );

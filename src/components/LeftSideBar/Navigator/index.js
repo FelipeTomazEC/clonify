@@ -11,7 +11,7 @@ export function Navigator() {
 
   return (
     <Container>
-      <NavLink to="/application/home">
+      <NavLink to="/home">
         <NavigationButton
           DisableIcon={AiOutlineHome}
           EnableIcon={AiFillHome}
@@ -21,7 +21,7 @@ export function Navigator() {
         />
       </NavLink>
 
-      <NavLink to="/application/browse">
+      <NavLink to="/browse">
         <NavigationButton
           DisableIcon={BsCollection}
           EnableIcon={BsCollectionFill}
@@ -31,7 +31,7 @@ export function Navigator() {
         />
       </NavLink>
 
-      <NavLink to="/application/radio">
+      <NavLink to="/radio">
         <NavigationButton
           DisableIcon={FiRadio}
           EnableIcon={FiRadio}
