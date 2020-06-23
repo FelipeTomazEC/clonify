@@ -38,11 +38,11 @@ export function Application() {
             <main className="content">
               <Switch>
                 <Route
-                  path="/application/home"
+                  path="/home"
                   render={(props) => <Home {...props} userId={user.id} />}
                 />
-                <Route path="/application/browse" component={Browse} />
-                <Route path="/application/radio" component={Radio} />
+                <Route path="/browse" component={Browse} />
+                <Route path="/radio" component={Radio} />
               </Switch>
             </main>
           </UserPlaylistsProvider>
