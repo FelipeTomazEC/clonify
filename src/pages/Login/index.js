@@ -7,7 +7,7 @@ import { Container } from "./styles";
 
 export function Login() {
   return isLogged() ? (
-    <Redirect to={{ pathname: "/home" }} />
+    <Redirect to={{ pathname: "/application/home" }} />
   ) : (
     <Container>
       <div className="hero">

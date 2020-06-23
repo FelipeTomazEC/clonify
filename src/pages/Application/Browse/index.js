@@ -16,11 +16,16 @@ export function Browse() {
           <Switch>
             <Route
               exact
-              path="/browse"
-              render={() => <Redirect to="/browse/genres-and-moods" />}
+              path="/application/browse"
+              render={() => (
+                <Redirect to="/application/browse/genres-and-moods" />
+              )}
             />
 
-            <Route path="/browse/genres-and-moods" component={GenresAndMoods} />
+            <Route
+              path="/application/browse/genres-and-moods"
+              component={GenresAndMoods}
+            />
           </Switch>
         </main>
       </Container>

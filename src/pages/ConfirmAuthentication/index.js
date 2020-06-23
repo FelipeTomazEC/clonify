@@ -16,7 +16,7 @@ export function ConfirmAuthentication() {
 
     const token = params.get("access_token");
     const tokenTimeToLive = params.get("expires_in");
-    const redirectToApp = () => history.push("/home");
+    const redirectToApp = () => history.push("/application/home");
 
     setSession(token, tokenTimeToLive, redirectToApp);
   }, [history, location]);

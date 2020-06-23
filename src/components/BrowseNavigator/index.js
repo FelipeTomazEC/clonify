@@ -19,7 +19,7 @@ export function BrowseNavigator() {
       <ul>
         {categories.map((cat, index) => (
           <li key={index}>
-            <NavLink to={`/browse/${cat.replace(/\s/g, "-")}`}>
+            <NavLink to={`/application/browse/${cat.replace(/\s/g, "-")}`}>
               <NavigationButton
                 isActive={active === cat}
                 text={cat}
