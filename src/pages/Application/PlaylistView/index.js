@@ -1,27 +1,83 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { BsHeartFill, BsThreeDots } from "react-icons/bs";
+import { FaRegPlayCircle } from "react-icons/fa";
+import { RiCalendar2Line } from "react-icons/ri";
 import { useInView } from "react-intersection-observer";
+import { useParams } from "react-router-dom";
+import { ContentLoadingAnimation } from "../../../components/ContentLoadingAnimation";
 import { HeaderPlaylistView } from "../../../components/HeaderPlaylistView";
-import { Container } from "./styles";
+import { getPlaylistFromAPI } from "../../../services/get-playlist-from-api";
+import { AnimationContainer, Container } from "./styles";
 
 export function PlaylistView() {
   const [ref, isSentinelInView] = useInView({ threshold: 0 });
-  const cover =
-    "https://t.scdn.co/images/519576e01b61450390234a623c97aa9a.jpeg";
+  const { id } = useParams();
+  const [playlist, setPlaylist] = useState(null);
 
-  return (
+  useEffect(() => {
+    getPlaylistFromAPI(id)
+      .then((playlist) => setPlaylist(playlist))
+      .catch((err) => console.error(err));
+  }, [id]);
+
+  return playlist === null ? (
+    <AnimationContainer>
+      <ContentLoadingAnimation />
+    </AnimationContainer>
+  ) : (
     <Container>
       <div ref={ref} className="sticky-guard"></div>
       <HeaderPlaylistView
-        cover={cover}
+        cover={playlist.cover}
         creatorName="Felipe Tomaz"
-        description="Lorem, ipsum dolor sit amet consectetur adipisicing elit."
-        name="Black in History"
-        numberOfFollowers={200000}
-        numberOfSongs={150}
+        description={playlist.description}
+        name={playlist.name}
+        numberOfFollowers={playlist.followersNumber}
+        numberOfSongs={playlist.tracks.length}
         timeLength={9000000}
         compact={!isSentinelInView}
       />
-      <div className="content"></div>
+      <section className="tracks-section">
+        <table className="tracks-table">
+          <thead>
+            <tr>
+              <th />
+              <th />
+              <th>Title</th>
+              <th>Artist</th>
+              <th>
+                <RiCalendar2Line />
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {playlist.tracks.map((track) => (
+              <tr key={track.id}>
+                <td className="col-play-button">
+                  <button>
+                    <FaRegPlayCircle size={25} />
+                  </button>
+                </td>
+                <td className="col-like-button">
+                  <button>
+                    <BsHeartFill size={15} />
+                  </button>
+                </td>
+                <td className="col-title">{track.title}</td>
+                <td className="col-artist">
+                  {track.artists.map((a) => a.name).join(", ")}
+                </td>
+                <td className="col-more-button">
+                  <button>
+                    <BsThreeDots size={20} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
     </Container>
   );
 }
