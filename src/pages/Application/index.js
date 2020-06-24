@@ -9,6 +9,7 @@ import { UserPlaylistsProvider } from "../../providers/user-playlists-context";
 import { getCurrentUserInfoFromAPI } from "../../services/get-current-user-data-from-api";
 import { Browse } from "./Browse";
 import { Home } from "./Home";
+import { PlaylistView } from "./PlaylistView";
 import { Radio } from "./Radio";
 import { Container } from "./styles";
 
@@ -43,6 +44,7 @@ export function Application() {
                 />
                 <Route path="/application/browse" component={Browse} />
                 <Route path="/application/radio" component={Radio} />
+                <Route path="/application/playlists" component={PlaylistView} />
               </Switch>
             </main>
           </UserPlaylistsProvider>

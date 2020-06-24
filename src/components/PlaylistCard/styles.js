@@ -6,6 +6,10 @@ export const Container = styled.div`
   line-height: 1rem;
   overflow: hidden;
 
+  a:link {
+    text-decoration: none;
+  }
+
   > * {
     display: block;
   }

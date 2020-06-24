@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { NavLink } from "react-router-dom";
 import { TrackQueueContext } from "../../providers/track-queue-context";
 import { getPlaylistFromAPI } from "../../services/get-playlist-from-api";
 import { PlayableCard } from "../PlayableCard";
@@ -17,7 +18,10 @@ export function PlaylistCard({ playlist }) {
         isLiked={isLiked}
         handlePlayClick={handlePlayClick}
       />
-      <strong className="name">{name}</strong>
+
+      <NavLink to="/application/playlists">
+        <strong className="name">{name}</strong>
+      </NavLink>
       <span className="description">{description}</span>
       <span className="followers-number">
         {followersNumber ? `${followersNumber} Followers` : ""}
