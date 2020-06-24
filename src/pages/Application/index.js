@@ -44,7 +44,10 @@ export function Application() {
                 />
                 <Route path="/application/browse" component={Browse} />
                 <Route path="/application/radio" component={Radio} />
-                <Route path="/application/playlists" component={PlaylistView} />
+                <Route
+                  path="/application/playlists/:id"
+                  component={PlaylistView}
+                />
               </Switch>
             </main>
           </UserPlaylistsProvider>

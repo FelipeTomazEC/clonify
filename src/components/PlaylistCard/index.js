@@ -19,7 +19,7 @@ export function PlaylistCard({ playlist }) {
         handlePlayClick={handlePlayClick}
       />
 
-      <NavLink to="/application/playlists">
+      <NavLink to={`/application/playlists/${playlist.id}`}>
         <strong className="name">{name}</strong>
       </NavLink>
       <span className="description">{description}</span>
