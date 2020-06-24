@@ -29,7 +29,7 @@ export function HeaderPlaylistView({
   const LikeIcon = isLiked ? BsHeartFill : BsHeart;
 
   return (
-    <Container>
+    <Container compact={compact}>
       <div className="wrapper" compact={compact.toString()}>
         <img src={cover} alt="cover" className="cover" />
         <div className="info-container">

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  position: sticky;
+  position: ${(props) => (props.compact ? "sticky" : "block")};
   top: 0;
   max-height: 0px;
 
