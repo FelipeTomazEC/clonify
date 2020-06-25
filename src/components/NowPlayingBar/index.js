@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { CurrentPlayingContext } from "../../providers/current-playing-context";
 import { TrackQueueContext } from "../../providers/track-queue-context";
 import { AppControls } from "./AppControls";
 import { Container } from "./styles";
@@ -8,16 +9,16 @@ import { TrackDetails } from "./TrackDetails";
 const PLAY_NEXT_TRACK = 1;
 const PLAY_PREVIOUS_TRACK = 2;
 
-export function NowPlayingBar() {
+export function NowPlayingBar({ toggleFullScreen }) {
   const [queue] = useContext(TrackQueueContext);
-  const [currentTrack, setCurrentTrack] = useState(queue[0]);
+  const [currentTrack, setCurrentTrack] = useContext(CurrentPlayingContext);
   const [currentAudioTrack, setCurrentAudioTrack] = useState(
     new Audio(queue[0].sourceUrl)
   );
 
   useEffect(() => {
     setCurrentTrack(queue[0]);
-  }, [queue]);
+  }, [queue, setCurrentTrack]);
 
   useEffect(() => {
     const newAudio = new Audio(currentTrack.sourceUrl);
@@ -73,7 +74,10 @@ export function NowPlayingBar() {
         handlePrevClick={() => changeTrack(PLAY_PREVIOUS_TRACK)}
         handlePlayPauseClick={handlePlayPauseClick}
       />
-      <AppControls audio={currentAudioTrack} />
+      <AppControls
+        audio={currentAudioTrack}
+        toggleFullScreen={toggleFullScreen}
+      />
     </Container>
   );
 }
