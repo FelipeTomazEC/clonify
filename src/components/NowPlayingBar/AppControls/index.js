@@ -4,7 +4,7 @@ import { FaExpandAlt } from "react-icons/fa";
 import { MdImportantDevices, MdQueueMusic } from "react-icons/md";
 import { Container } from "./styles";
 
-export function AppControls({ audio }) {
+export function AppControls({ audio, toggleFullScreen }) {
   const [volume, setVolume] = useState(0.5);
   const [muted, setMuted] = useState(false);
 
@@ -51,7 +51,7 @@ export function AppControls({ audio }) {
         value={volume * 100}
         onChange={changeVolume}
       />
-      <button>
+      <button onClick={toggleFullScreen}>
         <FaExpandAlt size={18} />
       </button>
     </Container>
