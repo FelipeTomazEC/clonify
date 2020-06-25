@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BsHeartFill, BsThreeDots } from "react-icons/bs";
 import { FaRegPlayCircle } from "react-icons/fa";
 import { RiCalendar2Line } from "react-icons/ri";
@@ -6,6 +6,8 @@ import { useInView } from "react-intersection-observer";
 import { useParams } from "react-router-dom";
 import { ContentLoadingAnimation } from "../../../components/ContentLoadingAnimation";
 import { HeaderPlaylistView } from "../../../components/HeaderPlaylistView";
+import { CurrentPlayingContext } from "../../../providers/current-playing-context";
+import { TrackQueueContext } from "../../../providers/track-queue-context";
 import { getPlaylistFromAPI } from "../../../services/get-playlist-from-api";
 import { AnimationContainer, Container } from "./styles";
 
@@ -13,12 +15,21 @@ export function PlaylistView() {
   const [ref, isSentinelInView] = useInView({ threshold: 0 });
   const { id } = useParams();
   const [playlist, setPlaylist] = useState(null);
+  const [, setQueue] = useContext(TrackQueueContext);
+  const [currentTrack, setCurrentTrack] = useContext(CurrentPlayingContext);
 
   useEffect(() => {
     getPlaylistFromAPI(id)
       .then((playlist) => setPlaylist(playlist))
       .catch((err) => console.error(err));
   }, [id]);
+
+  const handleTrackClick = (track) => {
+    setQueue(playlist.tracks);
+    setCurrentTrack(track);
+  };
+
+  const isActive = (track) => (track.id === currentTrack.id ? "true" : "false");
 
   return playlist === null ? (
     <AnimationContainer>
@@ -53,9 +64,9 @@ export function PlaylistView() {
 
           <tbody>
             {playlist.tracks.map((track) => (
-              <tr key={track.id}>
+              <tr key={track.id} active={isActive(track)}>
                 <td className="col-play-button">
-                  <button>
+                  <button onClick={() => handleTrackClick(track)}>
                     <FaRegPlayCircle size={25} />
                   </button>
                 </td>

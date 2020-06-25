@@ -87,6 +87,10 @@ export const Container = styled.div`
         }
       }
 
+      tr[active="true"] {
+        color: #1db954;
+      }
+
       .col-like-button,
       .col-play-button,
       .col-more-button {
