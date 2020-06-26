@@ -35,6 +35,10 @@ export function PlaylistView() {
     return track.id === currentTrack?.id ? "true" : "false";
   };
 
+  const timeLength = playlist
+    ? playlist.tracks.reduce((acc, t) => t.duration + acc, 0)
+    : 0;
+
   return playlist === null ? (
     <AnimationContainer>
       <ContentLoadingAnimation />
@@ -44,12 +48,12 @@ export function PlaylistView() {
       <div ref={ref} className="sticky-guard"></div>
       <HeaderPlaylistView
         cover={playlist.cover}
-        creatorName="Felipe Tomaz"
+        creatorName={playlist.ownerName}
         description={playlist.description}
         name={playlist.name}
         numberOfFollowers={playlist.followersNumber}
         numberOfSongs={playlist.tracks.length}
-        timeLength={9000000}
+        timeLength={timeLength}
         compact={!isSentinelInView}
       />
       <section className="tracks-section">
