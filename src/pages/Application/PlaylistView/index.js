@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { BsHeartFill, BsThreeDots } from "react-icons/bs";
-import { FaRegPlayCircle } from "react-icons/fa";
+import { BsHeartFill, BsThreeDots, BsVolumeUp } from "react-icons/bs";
+import { FaPlay } from "react-icons/fa";
 import { RiCalendar2Line } from "react-icons/ri";
 import { useInView } from "react-intersection-observer";
 import { useParams } from "react-router-dom";
@@ -32,7 +32,7 @@ export function PlaylistView() {
     const { queue, currentPlayingIndex } = player;
     const currentTrack = queue[currentPlayingIndex];
 
-    return track.id === currentTrack?.id ? "true" : "false";
+    return track.id === currentTrack?.id;
   };
 
   return playlist === null ? (
@@ -59,10 +59,14 @@ export function PlaylistView() {
 
           <tbody>
             {playlist.tracks.map((track, index) => (
-              <tr key={track.id} active={isActive(track)}>
+              <tr key={track.id} active={isActive(track).toString()}>
                 <td className="col-play-button">
                   <button onClick={() => handleTrackClick(index)}>
-                    <FaRegPlayCircle size={25} />
+                    {isActive(track) ? (
+                      <BsVolumeUp size={15} />
+                    ) : (
+                      <FaPlay size={10} />
+                    )}
                   </button>
                 </td>
                 <td className="col-like-button">

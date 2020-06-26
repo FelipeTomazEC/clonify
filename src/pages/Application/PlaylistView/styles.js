@@ -55,7 +55,7 @@ export const Container = styled.div`
 
       th,
       td {
-        border-bottom: rgba(178, 175, 174, 0.2) solid 1px;
+        border-bottom: #282828 solid 1px;
         text-align: left;
         vertical-align: center;
         max-width: 0px;
@@ -78,6 +78,8 @@ export const Container = styled.div`
 
       tr {
         :hover {
+          background-color: #282828;
+
           > .col-play-button,
           .col-more-button {
             button {
@@ -89,6 +91,12 @@ export const Container = styled.div`
 
       tr[active="true"] {
         color: #1db954;
+
+        .col-play-button {
+          button {
+            display: block;
+          }
+        }
       }
 
       .col-like-button,
@@ -96,6 +104,7 @@ export const Container = styled.div`
       .col-more-button {
         padding: 0;
         width: 35px;
+        height: 100%;
 
         button {
           background-color: transparent;
@@ -103,11 +112,31 @@ export const Container = styled.div`
           line-height: 50%;
           outline: none;
           color: #fff;
-          width: 100%;
-          height: 100%;
+          width: 35px;
+          height: 35px;
 
           :hover {
             transform: scale(1.1);
+          }
+        }
+      }
+
+      .col-play-button {
+        position: relative;
+
+        button {
+          background-color: #181817;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translateX(-50%) translateY(-50%);
+          border-radius: 50%;
+          border: #fff 1px solid;
+          width: 28px;
+          height: 28px;
+
+          :hover {
+            transform: translateX(-50%) translateY(-50%) scale(1.1);
           }
         }
       }
