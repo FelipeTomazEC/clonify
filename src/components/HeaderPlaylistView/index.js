@@ -1,18 +1,42 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BsHeart, BsHeartFill, BsThreeDots } from "react-icons/bs";
+import { PlayerContext } from "../../providers/player-context";
+import { CHANGE_QUEUE, PLAY_TRACK } from "../../reducers/player-reducer";
 import { Container } from "./styles";
 
 export function HeaderPlaylistView({
-  cover,
-  name,
-  description,
-  numberOfFollowers,
-  numberOfSongs,
-  creatorName,
-  timeLength,
+  playlist,
   isLiked = true,
   compact = false,
 }) {
+  const [player, dispatch] = useContext(PlayerContext);
+  const [playButtonText, setPlayButtonText] = useState("Play");
+
+  useEffect(() => {
+    if (player.queue !== playlist.tracks) {
+      return setPlayButtonText("Play");
+    }
+
+    const audioTrack = player.currentPlayingAudio;
+    if (audioTrack) {
+      audioTrack.onplay = () => setPlayButtonText("Pause");
+      audioTrack.onpause = () => setPlayButtonText("Play");
+    }
+  }, [player, playlist]);
+
+  const handlePlayPauseClick = () => {
+    if (player.queue !== playlist.tracks) {
+      dispatch({ type: CHANGE_QUEUE, queue: playlist.tracks });
+      dispatch({ type: PLAY_TRACK, trackIndex: 0 });
+      return;
+    }
+
+    const audioTrack = player.currentPlayingAudio;
+    const isPlaying = !audioTrack.paused;
+
+    return isPlaying ? audioTrack.pause() : audioTrack.play();
+  };
+
   const formatTo2Digits = (number) => {
     const formatted = `${number}`.padStart(2, "0");
     return formatted;
@@ -28,29 +52,35 @@ export function HeaderPlaylistView({
 
   const LikeIcon = isLiked ? BsHeartFill : BsHeart;
 
+  const timeLength = playlist
+    ? playlist.tracks.reduce((acc, t) => t.duration + acc, 0)
+    : 0;
+
   return (
     <Container compact={compact}>
       <div className="wrapper" compact={compact.toString()}>
-        <img src={cover} alt="cover" className="cover" />
+        <img src={playlist.cover} alt="cover" className="cover" />
         <div className="info-container">
           <small className="label">PLAYLIST</small>
-          <h1 className="name">{name}</h1>
-          <p className="description">{description}</p>
+          <h1 className="name">{playlist.name}</h1>
+          <p className="description">{playlist.description}</p>
           <span className="created-by">
-            Created by <strong>{creatorName}</strong>
+            Created by <strong>{playlist.ownerName}</strong>
           </span>
           <span className="details">
-            {numberOfSongs} songs, {getTimeInHours(timeLength)}
+            {playlist.tracks.length} songs, {getTimeInHours(timeLength)}
           </span>
         </div>
 
         <div className="followers-info">
           <span>Followers</span>
-          <span>{numberOfFollowers}</span>
+          <span>{playlist.followersNumber}</span>
         </div>
 
         <div className="buttons">
-          <button className="play-pause">Play</button>
+          <button className="play-pause" onClick={handlePlayPauseClick}>
+            {playButtonText}
+          </button>
           <button className="like">
             <LikeIcon size={15} />
           </button>
