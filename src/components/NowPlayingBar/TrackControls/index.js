@@ -1,36 +1,57 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BsSkipEndFill, BsSkipStartFill } from "react-icons/bs";
 import { FaRandom, FaRegPauseCircle, FaRegPlayCircle } from "react-icons/fa";
 import { FiRepeat } from "react-icons/fi";
+import { PlayerContext } from "../../../providers/player-context";
+import { PLAY_TRACK } from "../../../reducers/player-reducer";
 import { Container } from "./styles";
 
-export function TrackControls({
-  audioTrack,
-  handlePrevClick,
-  handleNextClick,
-  handlePlayPauseClick,
-}) {
+export function TrackControls() {
+  const [player, dispatch] = useContext(PlayerContext);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  // useEffect(() => {
-  //   const newAudio = new Audio(sourceUrl);
-  //   setTrack((prev) => {
-  //     prev.pause();
-  //     return newAudio;
-  //   });
-
-  //   if (autoPlay) newAudio.play();
-  // }, [autoPlay, sourceUrl]);
+  const audioTrack = player.currentPlayingAudio;
 
   useEffect(() => {
-    audioTrack.ontimeupdate = () => setCurrentTime(audioTrack.currentTime);
-    audioTrack.onloadedmetadata = () => setDuration(audioTrack.duration);
+    if (audioTrack) {
+      audioTrack.ontimeupdate = () => setCurrentTime(audioTrack.currentTime);
+      audioTrack.onloadedmetadata = () => setDuration(audioTrack.duration);
+
+      audioTrack.play();
+
+      return (prev) => (prev ? prev.pause() : null);
+    }
   }, [audioTrack]);
 
-  const PlayPauseButtonIcon = audioTrack.paused
-    ? FaRegPlayCircle
-    : FaRegPauseCircle;
+  const handlePlayPauseClick = () => {
+    const isPlaying = !audioTrack.paused;
+
+    return isPlaying ? audioTrack.pause() : audioTrack.play();
+  };
+
+  const handlePrevClick = () => {
+    const { currentPlayingIndex } = player;
+    const prevIndex = Math.max(currentPlayingIndex - 1, 0);
+
+    dispatch({ type: PLAY_TRACK, trackIndex: prevIndex });
+  };
+
+  const handleNextClick = () => {
+    const { currentPlayingIndex, queue } = player;
+    const nextIndex = Math.min(currentPlayingIndex + 1, queue.length - 1);
+
+    dispatch({ type: PLAY_TRACK, trackIndex: nextIndex });
+  };
+
+  const changeProgress = (e) => {
+    const newProgress = e.target.value;
+    audioTrack.currentTime = newProgress;
+  };
+
+  const restartFromTheBeginning = () => {
+    audioTrack.currentTime = 0;
+  };
 
   const getTimeInMinutes = (timeInSeconds) => {
     const seconds = Math.round(timeInSeconds) % 60;
@@ -39,14 +60,9 @@ export function TrackControls({
     return `${minutes}:${"".concat(seconds).padStart(2, 0)}`.split(".")[0];
   };
 
-  function changeProgress(e) {
-    const newProgress = e.target.value;
-    audioTrack.currentTime = newProgress;
-  }
-
-  function restartFromTheBeginning() {
-    audioTrack.currentTime = 0;
-  }
+  const PlayPauseButtonIcon = audioTrack?.paused
+    ? FaRegPlayCircle
+    : FaRegPauseCircle;
 
   return (
     <Container>

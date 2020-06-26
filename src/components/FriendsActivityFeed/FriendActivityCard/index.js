@@ -1,19 +1,22 @@
 import React, { useContext } from "react";
 import { FaPlay } from "react-icons/fa";
 import { RiAlbumLine } from "react-icons/ri";
-import { TrackQueueContext } from "../../../providers/track-queue-context";
+import { PlayerContext } from "../../../providers/player-context";
+import { CHANGE_QUEUE, PLAY_TRACK } from "../../../reducers/player-reducer";
 import { getAlbumTracks } from "../../../services/spotify-web-api-service";
 import { Container } from "./styles";
 
 export function FriendActivityCard({ activity }) {
   const { friend, currentSong: song } = activity;
-  const [, setQueue] = useContext(TrackQueueContext);
+  const [, dispatch] = useContext(PlayerContext);
 
   const handlePlayClick = async () => {
     try {
       const tracks = await getAlbumTracks(song.albumId);
-      const firstTrack = tracks.find((t) => t.id === song.id);
-      setQueue([firstTrack, ...tracks]);
+      const trackIndex = tracks.findIndex((t) => t.id === song.id);
+
+      dispatch({ type: CHANGE_QUEUE, queue: tracks });
+      dispatch({ type: PLAY_TRACK, trackIndex });
     } catch (err) {
       console.error(err);
     }

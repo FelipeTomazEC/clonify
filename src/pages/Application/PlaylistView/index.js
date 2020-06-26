@@ -6,8 +6,8 @@ import { useInView } from "react-intersection-observer";
 import { useParams } from "react-router-dom";
 import { ContentLoadingAnimation } from "../../../components/ContentLoadingAnimation";
 import { HeaderPlaylistView } from "../../../components/HeaderPlaylistView";
-import { CurrentPlayingContext } from "../../../providers/current-playing-context";
-import { TrackQueueContext } from "../../../providers/track-queue-context";
+import { PlayerContext } from "../../../providers/player-context";
+import { CHANGE_QUEUE, PLAY_TRACK } from "../../../reducers/player-reducer";
 import { getPlaylistFromAPI } from "../../../services/get-playlist-from-api";
 import { AnimationContainer, Container } from "./styles";
 
@@ -15,8 +15,7 @@ export function PlaylistView() {
   const [ref, isSentinelInView] = useInView({ threshold: 0 });
   const { id } = useParams();
   const [playlist, setPlaylist] = useState(null);
-  const [, setQueue] = useContext(TrackQueueContext);
-  const [currentTrack, setCurrentTrack] = useContext(CurrentPlayingContext);
+  const [player, dispatch] = useContext(PlayerContext);
 
   useEffect(() => {
     getPlaylistFromAPI(id)
@@ -24,12 +23,17 @@ export function PlaylistView() {
       .catch((err) => console.error(err));
   }, [id]);
 
-  const handleTrackClick = (track) => {
-    setQueue(playlist.tracks);
-    setCurrentTrack(track);
+  const handleTrackClick = (trackIndex) => {
+    dispatch({ type: CHANGE_QUEUE, queue: playlist.tracks });
+    dispatch({ type: PLAY_TRACK, trackIndex });
   };
 
-  const isActive = (track) => (track.id === currentTrack.id ? "true" : "false");
+  const isActive = (track) => {
+    const { queue, currentPlayingIndex } = player;
+    const currentTrack = queue[currentPlayingIndex];
+
+    return track.id === currentTrack?.id ? "true" : "false";
+  };
 
   return playlist === null ? (
     <AnimationContainer>
@@ -63,10 +67,10 @@ export function PlaylistView() {
           </thead>
 
           <tbody>
-            {playlist.tracks.map((track) => (
+            {playlist.tracks.map((track, index) => (
               <tr key={track.id} active={isActive(track)}>
                 <td className="col-play-button">
-                  <button onClick={() => handleTrackClick(track)}>
+                  <button onClick={() => handleTrackClick(index)}>
                     <FaRegPlayCircle size={25} />
                   </button>
                 </td>

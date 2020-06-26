@@ -11,11 +11,11 @@ export function AppControls({ audio, toggleFullScreen }) {
   const VolumeIcon = volume === 0 || muted ? BsVolumeMute : BsVolumeUp;
 
   useEffect(() => {
-    audio.volume = volume;
+    if (audio) audio.volume = volume;
   }, [audio, volume]);
 
   useEffect(() => {
-    audio.volume = muted ? 0 : volume;
+    if (audio) audio.volume = muted ? 0 : volume;
   }, [muted, audio, volume]);
 
   function changeVolume(e) {
@@ -27,9 +27,7 @@ export function AppControls({ audio, toggleFullScreen }) {
     }
   }
 
-  function muteOrUnmute() {
-    setMuted(!muted);
-  }
+  const muteOrUnmute = () => setMuted(!muted);
 
   return (
     <Container>

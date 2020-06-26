@@ -5,8 +5,7 @@ import { FriendsActivityFeed } from "../../components/FriendsActivityFeed";
 import { Header } from "../../components/Header";
 import { LeftSideBar } from "../../components/LeftSideBar";
 import { NowPlayingBar } from "../../components/NowPlayingBar";
-import { CurrentPlayingProvider } from "../../providers/current-playing-context";
-import { TrackQueueProvider } from "../../providers/track-queue-context";
+import { PlayerProvider } from "../../providers/player-context";
 import { UserPlaylistsProvider } from "../../providers/user-playlists-context";
 import { getCurrentUserInfoFromAPI } from "../../services/get-current-user-data-from-api";
 import { Browse } from "./Browse";
@@ -37,35 +36,33 @@ export function Application() {
           <header className="header">
             <Header user={user} />
           </header>
-          <TrackQueueProvider>
-            <CurrentPlayingProvider>
-              <UserPlaylistsProvider userId={user.id}>
-                <aside className="left">
-                  <LeftSideBar />
-                </aside>
-                <aside className="right">
-                  <FriendsActivityFeed />
-                </aside>
-                <main className="content">
-                  <Switch>
-                    <Route
-                      path="/application/home"
-                      render={(props) => <Home {...props} userId={user.id} />}
-                    />
-                    <Route path="/application/browse" component={Browse} />
-                    <Route path="/application/radio" component={Radio} />
-                    <Route
-                      path="/application/playlists/:id"
-                      component={PlaylistView}
-                    />
-                  </Switch>
-                </main>
-              </UserPlaylistsProvider>
-              <footer className="now-playing-bar">
-                <NowPlayingBar toggleFullScreen={toggleFullScreen} />
-              </footer>
-            </CurrentPlayingProvider>
-          </TrackQueueProvider>
+          <PlayerProvider>
+            <UserPlaylistsProvider userId={user.id}>
+              <aside className="left">
+                <LeftSideBar />
+              </aside>
+              <aside className="right">
+                <FriendsActivityFeed />
+              </aside>
+              <main className="content">
+                <Switch>
+                  <Route
+                    path="/application/home"
+                    render={(props) => <Home {...props} userId={user.id} />}
+                  />
+                  <Route path="/application/browse" component={Browse} />
+                  <Route path="/application/radio" component={Radio} />
+                  <Route
+                    path="/application/playlists/:id"
+                    component={PlaylistView}
+                  />
+                </Switch>
+              </main>
+            </UserPlaylistsProvider>
+            <footer className="now-playing-bar">
+              <NowPlayingBar toggleFullScreen={toggleFullScreen} />
+            </footer>
+          </PlayerProvider>
         </Container>
       </FullScreen>
     </BrowserRouter>
