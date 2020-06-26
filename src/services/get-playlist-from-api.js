@@ -19,6 +19,7 @@ const parseDataToTrack = (data) => {
   const albumCover = data.album.images[0]?.url;
   const albumId = data.album.id;
   const albumName = data.album.name;
+  const duration = data.duration_ms;
 
   return new Track({
     id,
@@ -28,6 +29,7 @@ const parseDataToTrack = (data) => {
     albumCover,
     albumId,
     albumName,
+    duration,
   });
 };
 
@@ -36,6 +38,7 @@ export async function getPlaylistFromAPI(playlistId) {
   const data = await fetchFromApi(endpoint);
 
   const { id, name, description, followers, images } = data;
+  const ownerName = data.owner.display_name || "Clonify";
   const tracks = data.tracks.items
     .flatMap((el) => (el.track.id ? [el.track] : []))
     .map(parseDataToTrack);
@@ -48,5 +51,6 @@ export async function getPlaylistFromAPI(playlistId) {
     cover: images[0]?.url,
     tracks,
     isLiked: false,
+    ownerName,
   });
 }
