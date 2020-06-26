@@ -7,6 +7,7 @@ export class Track {
     albumCover,
     albumId,
     albumName,
+    duration,
   }) {
     this.title = title;
     this.sourceUrl = sourceUrl;
@@ -15,5 +16,6 @@ export class Track {
     this.albumCover = albumCover;
     this.albumName = albumName;
     this.albumId = albumId;
+    this.duration = duration;
   }
 }

@@ -7,6 +7,7 @@ export class Playlist {
     description,
     followersNumber,
     isLiked,
+    ownerName,
   }) {
     this.id = id;
     this.tracks = tracks;
@@ -15,5 +16,6 @@ export class Playlist {
     this.description = description;
     this.followersNumber = followersNumber;
     this.isLiked = isLiked;
+    this.ownerName = ownerName;
   }
 }
