@@ -13,6 +13,7 @@ export const parseDataToTrack = (albumId, albumCover, albumName) => (data) => {
   const sourceUrl = data.preview_url;
   const id = data.id;
   const artists = data.artists.map(parseDataToArtist);
+  const duration = data.duration_ms;
 
   return new Track({
     id,
@@ -22,5 +23,6 @@ export const parseDataToTrack = (albumId, albumCover, albumName) => (data) => {
     albumCover,
     albumId,
     albumName,
+    duration,
   });
 };
