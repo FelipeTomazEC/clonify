@@ -8,6 +8,7 @@ import { NowPlayingBar } from "../../components/NowPlayingBar";
 import { PlayerProvider } from "../../providers/player-context";
 import { UserPlaylistsProvider } from "../../providers/user-playlists-context";
 import { getCurrentUserInfoFromAPI } from "../../services/get-current-user-data-from-api";
+import { AlbumView } from "./AlbumView";
 import { Browse } from "./Browse";
 import { Home } from "./Home";
 import { PlaylistView } from "./PlaylistView";
@@ -56,6 +57,7 @@ export function Application() {
                     path="/application/playlists/:id"
                     component={PlaylistView}
                   />
+                  <Route path="/application/albums/:id" component={AlbumView} />
                 </Switch>
               </main>
             </UserPlaylistsProvider>
