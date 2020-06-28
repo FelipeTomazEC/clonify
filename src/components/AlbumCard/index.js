@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { NavLink } from "react-router-dom";
 import { PlayerContext } from "../../providers/player-context";
 import { CHANGE_QUEUE } from "../../reducers/player-reducer";
 import { PlayableCard } from "../PlayableCard";
@@ -19,7 +20,9 @@ export function AlbumCard({ album }) {
         isLiked={isLiked}
         handlePlayClick={handlePlayClick}
       />
-      <strong className="name">{name}</strong>
+      <NavLink to={`/application/albums/${album.id}`}>
+        <strong className="name">{name}</strong>
+      </NavLink>
       <span className="artist">{artistsNames}</span>
     </Container>
   );

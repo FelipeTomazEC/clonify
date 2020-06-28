@@ -7,6 +7,10 @@ export const Container = styled.div`
   color: #b2afae;
   line-height: 1rem;
 
+  a:link {
+    text-decoration: none;
+  }
+
   .name {
     display: block;
     margin-top: 0.5rem;
@@ -18,7 +22,7 @@ export const Container = styled.div`
 
     :hover {
       text-decoration: underline;
-      text-underline-position: under;
+      text-underline-position: below;
     }
   }
 `;
