@@ -3,6 +3,7 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { BrowseNavigator } from "../../../components/BrowseNavigator";
 import { StickyPageHeader } from "../../../components/StickyPageHeader";
 import { GenresAndMoods } from "./GenresAndMoods";
+import { NotImplementedYet } from "./NotImplementedYet";
 import { Container } from "./styles";
 
 export function Browse() {
@@ -26,6 +27,8 @@ export function Browse() {
               path="/application/browse/genres-and-moods"
               component={GenresAndMoods}
             />
+
+            <Route path="/application/browse/" component={NotImplementedYet} />
           </Switch>
         </main>
       </Container>
