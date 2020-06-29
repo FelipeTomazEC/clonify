@@ -13,10 +13,10 @@ export const Container = styled.div`
   max-height: 100%;
   overflow: hidden;
   overflow-y: auto;
+  min-height: 100%;
 
   main {
     background-color: #181817;
     padding-left: 30px;
-    min-height: 100%;
   }
 `;
