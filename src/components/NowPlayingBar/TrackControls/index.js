@@ -25,9 +25,9 @@ export function TrackControls() {
   }, [audioTrack]);
 
   const handlePlayPauseClick = () => {
-    const isPlaying = !audioTrack.paused;
+    const isPlaying = !audioTrack?.paused;
 
-    return isPlaying ? audioTrack.pause() : audioTrack.play();
+    return isPlaying ? audioTrack?.pause() : audioTrack?.play();
   };
 
   const handlePrevClick = () => {
@@ -60,9 +60,8 @@ export function TrackControls() {
     return `${minutes}:${"".concat(seconds).padStart(2, 0)}`.split(".")[0];
   };
 
-  const PlayPauseButtonIcon = audioTrack?.paused
-    ? FaRegPlayCircle
-    : FaRegPauseCircle;
+  const PlayPauseButtonIcon =
+    audioTrack?.paused || !audioTrack ? FaRegPlayCircle : FaRegPauseCircle;
 
   return (
     <Container>
