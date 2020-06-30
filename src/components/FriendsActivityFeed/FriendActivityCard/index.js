@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { FaPlay } from "react-icons/fa";
 import { RiAlbumLine } from "react-icons/ri";
+import { NavLink } from "react-router-dom";
 import { PlayerContext } from "../../../providers/player-context";
 import { CHANGE_QUEUE, PLAY_TRACK } from "../../../reducers/player-reducer";
 import { getAlbumTracks } from "../../../services/spotify-web-api-service";
@@ -39,7 +40,9 @@ export function FriendActivityCard({ activity }) {
         <span className="artist">{artistsName}</span>
         <section className="song-album">
           <RiAlbumLine className="album-icon" size={20} />
-          <span>{song.albumName}</span>
+          <NavLink to={`/application/albums/${song.albumId}`}>
+            {song.albumName}
+          </NavLink>
         </section>
       </div>
     </Container>

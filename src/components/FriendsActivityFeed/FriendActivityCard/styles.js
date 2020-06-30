@@ -48,12 +48,15 @@ export const Container = styled.div`
     max-width: calc(100% - 55px);
 
     strong,
+    a,
     span {
+      text-decoration: none;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
       display: block;
       font-size: 0.8rem;
+      color: inherit;
 
       :hover {
         text-decoration: underline;
