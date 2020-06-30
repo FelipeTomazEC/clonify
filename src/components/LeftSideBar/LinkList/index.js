@@ -1,13 +1,11 @@
 import React from "react";
 import { Container } from "./styles";
 
-export function SideList({ title, items }) {
+export function LinkList({ title, children }) {
   return (
     <Container>
       <h4>{title}</h4>
-      {items.map((name, index) => (
-        <li key={index}>{name}</li>
-      ))}
+      <ul>{children}</ul>
     </Container>
   );
 }

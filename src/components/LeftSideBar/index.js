@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
+import { NavLink } from "react-router-dom";
 import { UserPlaylistsContext } from "../../providers/user-playlists-context";
+import { LinkList } from "./LinkList";
 import { Navigator } from "./Navigator";
-import { SideList } from "./SideList";
 import { Container } from "./styles";
 
 export function LeftSideBar() {
@@ -20,8 +21,21 @@ export function LeftSideBar() {
     <Container>
       <Navigator />
       <div className="list-container">
-        <SideList items={libraries} title="Your Library" />
-        <SideList items={playlists.map((p) => p.name)} title="Playlists" />
+        <LinkList title="Your Library">
+          {libraries.map((l) => (
+            <li key={l}>
+              <span>{l}</span>
+            </li>
+          ))}
+        </LinkList>
+
+        <LinkList title="Playlists">
+          {playlists.map((p) => (
+            <li key={p.id}>
+              <NavLink to={`/application/playlists/${p.id}`}>{p.name}</NavLink>
+            </li>
+          ))}
+        </LinkList>
       </div>
     </Container>
   );
