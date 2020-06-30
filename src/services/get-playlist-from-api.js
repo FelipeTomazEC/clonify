@@ -40,7 +40,7 @@ export async function getPlaylistFromAPI(playlistId) {
   const { id, name, description, followers, images } = data;
   const ownerName = data.owner.display_name || "Clonify";
   const tracks = data.tracks.items
-    .flatMap((el) => (el.track.id ? [el.track] : []))
+    .flatMap((el) => (el.track && el.track.id ? [el.track] : []))
     .map(parseDataToTrack);
 
   return new Playlist({
