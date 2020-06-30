@@ -11,8 +11,6 @@ export function NowPlayingBar({ toggleFullScreen }) {
 
   const currentTrack = queue[currentPlayingIndex];
 
-  console.log("Rendering...");
-
   return (
     <Container>
       {currentTrack ? (

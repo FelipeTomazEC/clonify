@@ -36,7 +36,6 @@ const parseDataToTrack = (data) => {
 export async function getPlaylistFromAPI(playlistId) {
   const endpoint = `/playlists/${playlistId}`;
   const data = await fetchFromApi(endpoint);
-  console.log(data);
 
   const { id, name, description, followers, images } = data;
   const ownerName = data.owner.display_name || "Clonify";
