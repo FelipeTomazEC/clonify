@@ -55,3 +55,9 @@ To run this project you must have:
 - [React JS](https://reactjs.org/) - Library for create web applications.
 - [Spotify Web API](https://developer.spotify.com/documentation/web-api/reference/) - Official API to access Spotify resources.
 - [Styled Components](https://styled-components.com/) - Library for styling react components.
+
+
+### License
+
+This project is licensed under the **MIT License** - see the [LICENSE.md](./LICENSE.md) file for details.
+
