@@ -1,7 +1,7 @@
-import { Album } from "../entities/album";
-import { Artist } from "../entities/artist";
-import { fetchFromApi } from "../services/spotify-web-api-service";
-import { parseDataToTrack } from "./data-mappers/parse-to-track";
+import { Album } from '../entities/album';
+import { Artist } from '../entities/artist';
+import { fetchFromApi } from '../services/spotify-web-api-service';
+import { parseDataToTrack } from './data-mappers/parse-to-track';
 
 const parseDataToArtist = (data) => {
   const name = data.name;
@@ -21,9 +21,16 @@ const parseDataToAlbum = (data) => {
 };
 
 export async function getMultipleAlbumsFromAPI(albumsIds) {
-  const endpoint = `/albums?ids=${albumsIds.join(",")}`;
+  const endpoint = `/albums?ids=${albumsIds.join(',')}`;
   const data = await fetchFromApi(endpoint);
   const albums = data.albums.map(parseDataToAlbum);
 
   return albums;
+}
+
+export async function getAlbumFromAPI(albumId) {
+  const endpoint = `/albums/${albumId}`;
+  const data = await fetchFromApi(endpoint);
+
+  return parseDataToAlbum(data);
 }
