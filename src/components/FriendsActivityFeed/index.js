@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { getFriendsActivity } from "../../services/spotify-web-api-service";
-import { FriendActivityCard } from "./FriendActivityCard";
-import { Container } from "./styles";
+import React, { useEffect, useState } from 'react';
+import { getFriendsActivitiesFromAPI } from '../../services/get-friends-activities-from-api';
+import { FriendActivityCard } from './FriendActivityCard';
+import { Container } from './styles';
 
 export function FriendsActivityFeed() {
   const [activities, setActivities] = useState([]);
 
   useEffect(() => {
-    getFriendsActivity()
+    getFriendsActivitiesFromAPI()
       .then((activities) => setActivities(activities))
       .catch((err) => console.error(err));
   }, []);

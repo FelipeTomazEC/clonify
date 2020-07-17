@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
-import { FaPlay } from "react-icons/fa";
-import { RiAlbumLine } from "react-icons/ri";
-import { NavLink } from "react-router-dom";
-import { PlayerContext } from "../../../providers/player-context";
-import { CHANGE_QUEUE, PLAY_TRACK } from "../../../reducers/player-reducer";
-import { getAlbumTracks } from "../../../services/spotify-web-api-service";
-import { Container } from "./styles";
+import React, { useContext } from 'react';
+import { FaPlay } from 'react-icons/fa';
+import { RiAlbumLine } from 'react-icons/ri';
+import { NavLink } from 'react-router-dom';
+import { PlayerContext } from '../../../providers/player-context';
+import { CHANGE_QUEUE, PLAY_TRACK } from '../../../reducers/player-reducer';
+import { getAlbumFromAPI } from '../../../services/get-album-from-api';
+import { Container } from './styles';
 
 export function FriendActivityCard({ activity }) {
   const { friend, currentSong: song } = activity;
@@ -13,7 +13,7 @@ export function FriendActivityCard({ activity }) {
 
   const handlePlayClick = async () => {
     try {
-      const tracks = await getAlbumTracks(song.albumId);
+      const tracks = (await getAlbumFromAPI(song.albumId)).tracks;
       const trackIndex = tracks.findIndex((t) => t.id === song.id);
 
       dispatch({ type: CHANGE_QUEUE, queue: tracks });
@@ -23,7 +23,7 @@ export function FriendActivityCard({ activity }) {
     }
   };
 
-  const artistsName = song.artists.map((a) => a.name).join(", ");
+  const artistsName = song.artists.map((a) => a.name).join(', ');
 
   return (
     <Container>
