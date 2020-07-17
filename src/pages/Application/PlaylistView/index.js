@@ -1,15 +1,15 @@
-import React, { Fragment, useContext, useEffect, useState } from "react";
-import { BsHeartFill, BsThreeDots, BsVolumeUp } from "react-icons/bs";
-import { FaPlay } from "react-icons/fa";
-import { RiCalendar2Line } from "react-icons/ri";
-import { useInView } from "react-intersection-observer";
-import { useParams } from "react-router-dom";
-import { ContentLoadingAnimation } from "../../../components/ContentLoadingAnimation";
-import { HeaderPlaylistView } from "../../../components/HeaderPlaylistView";
-import { PlayerContext } from "../../../providers/player-context";
-import { CHANGE_QUEUE, PLAY_TRACK } from "../../../reducers/player-reducer";
-import { getPlaylistFromAPI } from "../../../services/get-playlist-from-api";
-import { Container } from "./styles";
+import React, { Fragment, useContext, useEffect, useState } from 'react';
+import { BsHeartFill, BsThreeDots, BsVolumeUp } from 'react-icons/bs';
+import { FaPlay } from 'react-icons/fa';
+import { RiCalendar2Line } from 'react-icons/ri';
+import { useInView } from 'react-intersection-observer';
+import { useParams } from 'react-router-dom';
+import { ContentLoadingAnimation } from '../../../components/ContentLoadingAnimation';
+import { HeaderPlaylistView } from '../../../components/HeaderPlaylistView';
+import { PlayerContext } from '../../../providers/player-context';
+import { CHANGE_QUEUE, PLAY_TRACK } from '../../../reducers/player-reducer';
+import { getPlaylistFromAPI } from '../../../services/get-playlist-from-api';
+import { Container } from './styles';
 
 export function PlaylistView() {
   const [ref, isSentinelInView] = useInView({ threshold: 0 });
@@ -23,7 +23,9 @@ export function PlaylistView() {
       .catch((err) => console.error(err));
   }, [id]);
 
-  const handleTrackClick = (trackIndex) => {
+  const handleTrackClick = (track) => {
+    const trackIndex = playlist.tracks.indexOf(track);
+
     dispatch({ type: CHANGE_QUEUE, queue: playlist.tracks });
     dispatch({ type: PLAY_TRACK, trackIndex });
   };
@@ -34,6 +36,12 @@ export function PlaylistView() {
 
     return track.id === currentTrack?.id;
   };
+
+  const getTracksWithoutDuplicates = (tracks) => [
+    ...tracks
+      .reduce((acc, track) => acc.set(track.id, track), new Map())
+      .values(),
+  ];
 
   return (
     <Container>
@@ -58,10 +66,10 @@ export function PlaylistView() {
               </thead>
 
               <tbody>
-                {playlist.tracks.map((track, index) => (
+                {getTracksWithoutDuplicates(playlist.tracks).map((track) => (
                   <tr key={track.id} active={isActive(track).toString()}>
                     <td className="col-play-button">
-                      <button onClick={() => handleTrackClick(index)}>
+                      <button onClick={() => handleTrackClick(track)}>
                         {isActive(track) ? (
                           <BsVolumeUp size={15} />
                         ) : (
@@ -76,7 +84,7 @@ export function PlaylistView() {
                     </td>
                     <td className="col-title">{track.title}</td>
                     <td className="col-artist">
-                      {track.artists.map((a) => a.name).join(", ")}
+                      {track.artists.map((a) => a.name).join(', ')}
                     </td>
                     <td className="col-more-button">
                       <button>
