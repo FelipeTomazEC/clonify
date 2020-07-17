@@ -1,18 +1,19 @@
+import { Podcast } from '../entities/podcast';
 import {
   parseDataToPodcast,
   PodcastData,
 } from './data-mappers/parse-to-podcast';
 import { fetchFromApi } from './spotify-web-api-service';
 
-interface UserShowsData {
+interface UserShowsResponse {
   items: { show: PodcastData }[];
 }
 
-export async function getUserFollowedPodcasts() {
+export async function getUserFollowedPodcasts(): Promise<Podcast[]> {
   const endpoint = '/me/shows';
-  const podcastsData = await fetchFromApi(
+  const podcastsData = await fetchFromApi<UserShowsResponse>(
     endpoint
-  ).then((data: UserShowsData) => data.items.map((el) => el.show));
+  ).then((data) => data.items.map((el) => el.show));
 
   return podcastsData.map(parseDataToPodcast);
 }

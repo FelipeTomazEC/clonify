@@ -5,7 +5,7 @@ import { getPlaylistFromAPI } from './get-playlist-from-api';
 import { fetchFromApi } from './spotify-web-api-service';
 
 type ContextType = 'album' | 'playlist';
-type RecentPromisesCollection = Promise<Playlist | Album>[];
+type RecentPlayed = Playlist | Album;
 type URL = string;
 
 interface Context {
@@ -18,7 +18,7 @@ function isValidContext(context?: Context): boolean {
   return context?.type === 'album' || context?.type === 'playlist';
 }
 
-export async function getRecentPlayedFromAPI() {
+export async function getRecentPlayedFromAPI(): Promise<RecentPlayed[]> {
   const endpoint = '/me/player/recently-played?limit=50';
   const data: { items: { context?: Context }[] } = await fetchFromApi(endpoint);
 
@@ -31,7 +31,7 @@ export async function getRecentPlayedFromAPI() {
     }, new Map<string, ContextType>());
 
   const promises = [...contexts.entries()].reduce(
-    (acc: RecentPromisesCollection, entry) => {
+    (acc: Promise<RecentPlayed>[], entry) => {
       const [id, type] = entry;
       const promise =
         type === 'album' ? getAlbumFromAPI(id) : getPlaylistFromAPI(id);

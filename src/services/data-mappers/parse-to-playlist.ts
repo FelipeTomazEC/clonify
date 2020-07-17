@@ -11,7 +11,7 @@ interface ExtendedTrackData extends TrackData {
   album: AlbumData;
 }
 
-interface PlaylistData {
+export interface PlaylistData {
   description: string;
   followers: { total: number };
   id: string;

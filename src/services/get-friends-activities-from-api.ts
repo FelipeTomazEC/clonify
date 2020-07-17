@@ -9,6 +9,10 @@ interface TopPlaylistsData {
   items: { id: string }[];
 }
 
+interface TopPlaylistsEndpointResponse {
+  playlists: TopPlaylistsData;
+}
+
 function createFakeFriend(): User {
   const name = faker.name.findName();
   const avatarUrl = faker.internet.avatar();
@@ -19,7 +23,7 @@ function createFakeFriend(): User {
 
 async function getTopPlaylist(): Promise<Playlist> {
   const endpoint = '/browse/categories/toplists/playlists';
-  const data: TopPlaylistsData = await fetchFromApi(endpoint).then(
+  const data = await fetchFromApi<TopPlaylistsEndpointResponse>(endpoint).then(
     (response) => response.playlists
   );
   const ids = data.items.map((playlist) => playlist.id);
@@ -28,7 +32,7 @@ async function getTopPlaylist(): Promise<Playlist> {
   return await getPlaylistFromAPI(randomId);
 }
 
-export async function getFriendsActivitiesFromAPI() {
+export async function getFriendsActivitiesFromAPI(): Promise<FriendActivity[]> {
   const playlist = await getTopPlaylist();
   const activities = playlist.tracks.map(
     (track) =>
