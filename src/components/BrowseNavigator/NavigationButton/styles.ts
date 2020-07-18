@@ -1,6 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const Button = styled.button`
+interface Props {
+  active: boolean;
+}
+
+export const Button = styled.button<Props>`
   background-color: transparent;
   outline: none;
   border: none;
@@ -8,7 +12,7 @@ export const Button = styled.button`
   font-size: 0.82rem;
   font-weight: 800;
   cursor: pointer;
-  color: ${(props) => (props.active ? "#fff" : "#b2afae")};
+  color: ${(props) => (props.active ? '#fff' : '#b2afae')};
   position: relative;
   text-transform: uppercase;
 
@@ -18,14 +22,14 @@ export const Button = styled.button`
 
   ::after {
     position: absolute;
-    content: "";
+    content: '';
     height: 2px;
     left: 50%;
     margin-top: 1.3rem;
     transform: translateX(-50%);
-    border-bottom: ${(props) => (props.active ? "3px #1db954 solid" : "none")};
+    border-bottom: ${(props) => (props.active ? '3px #1db954 solid' : 'none')};
     animation: ${(props) =>
-      props.active ? "active-mark .3s forwards" : "none"};
+      props.active ? 'active-mark .3s forwards' : 'none'};
 
     @keyframes active-mark {
       from {
