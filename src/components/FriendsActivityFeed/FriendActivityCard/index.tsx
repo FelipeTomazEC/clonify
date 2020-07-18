@@ -2,21 +2,26 @@ import React, { useContext } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { RiAlbumLine } from 'react-icons/ri';
 import { NavLink } from 'react-router-dom';
+import { FriendActivity } from '../../../entities/friend-activity';
 import { PlayerContext } from '../../../providers/player-context';
 import { CHANGE_QUEUE, PLAY_TRACK } from '../../../reducers/player-reducer';
 import { getAlbumFromAPI } from '../../../services/get-album-from-api';
 import { Container } from './styles';
 
-export function FriendActivityCard({ activity }) {
-  const { friend, currentSong: song } = activity;
+interface Props {
+  activity: FriendActivity;
+}
+
+export function FriendActivityCard(props: Props) {
+  const { friend, currentSong: song } = props.activity;
   const [, dispatch] = useContext(PlayerContext);
 
   const handlePlayClick = async () => {
     try {
-      const tracks = (await getAlbumFromAPI(song.albumId)).tracks;
-      const trackIndex = tracks.findIndex((t) => t.id === song.id);
+      const album = await getAlbumFromAPI(song.albumId);
+      const trackIndex = album.tracks.findIndex((t) => t.id === song.id);
 
-      dispatch({ type: CHANGE_QUEUE, queue: tracks });
+      dispatch({ type: CHANGE_QUEUE, queue: album.tracks });
       dispatch({ type: PLAY_TRACK, trackIndex });
     } catch (err) {
       console.error(err);

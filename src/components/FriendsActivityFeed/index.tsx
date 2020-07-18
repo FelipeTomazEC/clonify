@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { FriendActivity } from '../../entities/friend-activity';
 import { getFriendsActivitiesFromAPI } from '../../services/get-friends-activities-from-api';
 import { FriendActivityCard } from './FriendActivityCard';
 import { Container } from './styles';
 
 export function FriendsActivityFeed() {
-  const [activities, setActivities] = useState([]);
+  const [activities, setActivities] = useState<FriendActivity[]>([]);
 
   useEffect(() => {
     getFriendsActivitiesFromAPI()
