@@ -1,6 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const Container = styled.div`
+interface Props {
+  cover: string;
+}
+
+export const Container = styled.div<Props>`
   min-width: 180px;
   min-height: 180px;
   width: 100%;
