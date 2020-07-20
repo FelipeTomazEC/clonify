@@ -1,8 +1,8 @@
-import React from "react";
-import { FaSearch } from "react-icons/fa";
-import { Container } from "./styles";
+import React from 'react';
+import { FaSearch } from 'react-icons/fa';
+import { Container } from './styles';
 
-export function SearchBar(_props) {
+export function SearchBar() {
   return (
     <Container>
       <FaSearch className="icon" size="14" />
