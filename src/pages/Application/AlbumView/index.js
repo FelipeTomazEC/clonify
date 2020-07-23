@@ -1,17 +1,15 @@
-import React, { Fragment, useContext, useEffect, useState } from "react";
-import { BsClock, BsHeartFill, BsThreeDots, BsVolumeUp } from "react-icons/bs";
-import { FaPlay } from "react-icons/fa";
-import { useInView } from "react-intersection-observer";
-import { useParams } from "react-router-dom";
-import { ContentLoadingAnimation } from "../../../components/ContentLoadingAnimation";
-import { HeaderAlbumView } from "../../../components/HeaderAlbumView";
-import { PlayerContext } from "../../../providers/player-context";
-import { CHANGE_QUEUE, PLAY_TRACK } from "../../../reducers/player-reducer";
-import { getMultipleAlbumsFromAPI } from "../../../services/get-album-from-api";
-import { Container } from "./styles";
+import React, { Fragment, useContext, useEffect, useState } from 'react';
+import { BsClock, BsHeartFill, BsThreeDots, BsVolumeUp } from 'react-icons/bs';
+import { FaPlay } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
+import { AlbumViewHeader } from '../../../components/AlbumViewHeader';
+import { ContentLoadingAnimation } from '../../../components/ContentLoadingAnimation';
+import { PlayerContext } from '../../../providers/player-context';
+import { CHANGE_QUEUE, PLAY_TRACK } from '../../../reducers/player-reducer';
+import { getMultipleAlbumsFromAPI } from '../../../services/get-album-from-api';
+import { Container } from './styles';
 
 export function AlbumView() {
-  const [ref, isSentinelInView] = useInView({ threshold: 0 });
   const { id } = useParams();
   const [album, setAlbum] = useState(null);
   const [player, dispatch] = useContext(PlayerContext);
@@ -35,7 +33,7 @@ export function AlbumView() {
   };
 
   const getTimeFromMilliseconds = (timeInMilliseconds) => {
-    const format2Digit = (value) => `${value}`.padStart(2, "0");
+    const format2Digit = (value) => `${value}`.padStart(2, '0');
     const timeInSeconds = Math.round(timeInMilliseconds / 1000);
     const hours = Math.floor(timeInSeconds / 3600);
     const minutes = Math.floor((timeInSeconds % 3600) / 60);
@@ -52,8 +50,7 @@ export function AlbumView() {
         <ContentLoadingAnimation className="loading-animation" />
       ) : (
         <Fragment>
-          <div ref={ref} className="sticky-guard"></div>
-          <HeaderAlbumView album={album} compact={!isSentinelInView} />
+          <AlbumViewHeader album={album} />
           <section className="tracks-section">
             <table className="tracks-table">
               <thead>
@@ -89,7 +86,7 @@ export function AlbumView() {
                     </td>
                     <td className="col-title">{track.title}</td>
                     <td className="col-artist">
-                      {track.artists.map((a) => a.name).join(", ")}
+                      {track.artists.map((a) => a.name).join(', ')}
                     </td>
                     <td className="col-more-button">
                       <button>

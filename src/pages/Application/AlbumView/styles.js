@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
   position: relative;
@@ -22,24 +22,13 @@ export const Container = styled.div`
     transform: translateY(-50%);
   }
 
-  /*
-    Guard to control how the header is presented when stuck.
-  */
-  .sticky-guard {
-    position: absolute;
-    top: 0;
-    z-index: 2;
-    height: 150px;
-    width: 100%;
-  }
-
   .tracks-section {
     margin-top: 270px;
     display: block;
     width: 100%;
     color: #fff;
     padding: 0px 32px;
-
+    z-index: 5;
     table {
       width: 100%;
       border-collapse: collapse;
@@ -87,7 +76,7 @@ export const Container = styled.div`
         }
       }
 
-      tr[active="true"] {
+      tr[active='true'] {
         color: #1db954;
 
         .col-play-button {
