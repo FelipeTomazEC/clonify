@@ -2,17 +2,15 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { BsHeartFill, BsThreeDots, BsVolumeUp } from 'react-icons/bs';
 import { FaPlay } from 'react-icons/fa';
 import { RiCalendar2Line } from 'react-icons/ri';
-import { useInView } from 'react-intersection-observer';
 import { useParams } from 'react-router-dom';
 import { ContentLoadingAnimation } from '../../../components/ContentLoadingAnimation';
-import { HeaderPlaylistView } from '../../../components/HeaderPlaylistView';
+import { PlaylistViewHeader } from '../../../components/PlaylistViewHeader';
 import { PlayerContext } from '../../../providers/player-context';
 import { CHANGE_QUEUE, PLAY_TRACK } from '../../../reducers/player-reducer';
 import { getPlaylistFromAPI } from '../../../services/get-playlist-from-api';
 import { Container } from './styles';
 
 export function PlaylistView() {
-  const [ref, isSentinelInView] = useInView({ threshold: 0 });
   const { id } = useParams();
   const [playlist, setPlaylist] = useState(null);
   const [player, dispatch] = useContext(PlayerContext);
@@ -49,8 +47,7 @@ export function PlaylistView() {
         <ContentLoadingAnimation className="loading-animation" />
       ) : (
         <Fragment>
-          <div ref={ref} className="sticky-guard"></div>
-          <HeaderPlaylistView playlist={playlist} compact={!isSentinelInView} />
+          <PlaylistViewHeader playlist={playlist} />
           <section className="tracks-section">
             <table className="tracks-table">
               <thead>
