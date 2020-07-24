@@ -1,3 +1,4 @@
+import sanitizeHTML from 'sanitize-html';
 import { Playlist } from '../../entities/playlist';
 import { AlbumData } from './parse-to-album';
 import { parseDataToTrack, TrackData } from './parse-to-track';
@@ -46,7 +47,7 @@ export const parseDataToPlaylist = (data: PlaylistData) => {
     cover: data.images[0]?.url,
     id: data.id,
     name: data.name,
-    description: data.description ?? '',
+    description: sanitizeHTML(data.description ?? '', { allowedTags: [] }),
     followersNumber: data.followers.total,
     isLiked: false,
     ownerName: data.owner.display_name,
