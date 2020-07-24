@@ -16,6 +16,8 @@ export const ExpandedContainer = styled.header`
     }
 
     .details-wrapper {
+      position: relative;
+      width: 100%;
       display: flex;
       flex-direction: column;
       color: #fff;
