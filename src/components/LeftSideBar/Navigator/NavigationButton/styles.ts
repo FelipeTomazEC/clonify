@@ -1,11 +1,15 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const Container = styled.button`
+interface Props {
+  isActive: boolean;
+}
+
+export const Container = styled.button<Props>`
   width: 100%;
   height: 45px;
   display: flex;
   align-items: center;
-  color: ${(props) => (props.isActive ? "#fff" : "#b2afae")};
+  color: ${(props) => (props.isActive ? '#fff' : '#b2afae')};
   font-size: 0.9rem;
   font-weight: bold;
   background-color: #0c0c0b;
@@ -14,11 +18,11 @@ export const Container = styled.button`
   /*Little green dash on active button*/
   position: relative;
   ::before {
-    content: " ";
+    content: ' ';
     position: absolute;
     height: 25px;
     margin-right: 20px;
-    border-left: ${(props) => (props.isActive ? "#1db954 solid 4px" : "none")};
+    border-left: ${(props) => (props.isActive ? '#1db954 solid 4px' : 'none')};
   }
 
   :active,
