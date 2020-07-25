@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Playlist } from '../../entities/playlist';
 import { UserPlaylistsContext } from '../../providers/user-playlists-context';
 import { LinkList } from './LinkList';
 import { Navigator } from './Navigator';
 import { Container } from './styles';
 
 export function LeftSideBar() {
-  const playlists = useContext(UserPlaylistsContext);
+  const playlists = useContext<Playlist[]>(UserPlaylistsContext);
 
   const libraries = [
     'Made For You',
