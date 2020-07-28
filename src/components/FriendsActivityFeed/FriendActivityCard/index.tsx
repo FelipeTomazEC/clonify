@@ -4,7 +4,7 @@ import { RiAlbumLine } from 'react-icons/ri';
 import { NavLink } from 'react-router-dom';
 import { FriendActivity } from '../../../entities/friend-activity';
 import { PlayerContext } from '../../../providers/player-context';
-import { CHANGE_QUEUE, PLAY_TRACK } from '../../../reducers/player-reducer';
+import { PlayerActionType } from '../../../reducers/player-reducer';
 import { getAlbumFromAPI } from '../../../services/get-album-from-api';
 import { Container } from './styles';
 
@@ -21,8 +21,15 @@ export function FriendActivityCard(props: Props) {
       const album = await getAlbumFromAPI(song.albumId);
       const trackIndex = album.tracks.findIndex((t) => t.id === song.id);
 
-      dispatch({ type: CHANGE_QUEUE, queue: album.tracks });
-      dispatch({ type: PLAY_TRACK, trackIndex });
+      dispatch({
+        type: PlayerActionType.CHANGE_QUEUE,
+        payload: { queue: album.tracks },
+      });
+
+      dispatch({
+        type: PlayerActionType.PLAY_TRACK,
+        payload: { trackIndex },
+      });
     } catch (err) {
       console.error(err);
     }

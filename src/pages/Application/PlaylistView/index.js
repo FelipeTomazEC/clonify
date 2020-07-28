@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { ContentLoadingAnimation } from '../../../components/ContentLoadingAnimation';
 import { PlaylistViewHeader } from '../../../components/PlaylistViewHeader';
 import { PlayerContext } from '../../../providers/player-context';
-import { CHANGE_QUEUE, PLAY_TRACK } from '../../../reducers/player-reducer';
+import { PlayerActionType } from '../../../reducers/player-reducer';
 import { getPlaylistFromAPI } from '../../../services/get-playlist-from-api';
 import { Container } from './styles';
 
@@ -24,8 +24,15 @@ export function PlaylistView() {
   const handleTrackClick = (track) => {
     const trackIndex = playlist.tracks.indexOf(track);
 
-    dispatch({ type: CHANGE_QUEUE, queue: playlist.tracks });
-    dispatch({ type: PLAY_TRACK, trackIndex });
+    dispatch({
+      type: PlayerActionType.CHANGE_QUEUE,
+      payload: { queue: playlist.tracks },
+    });
+
+    dispatch({
+      type: PlayerActionType.PLAY_TRACK,
+      payload: { trackIndex },
+    });
   };
 
   const isActive = (track) => {

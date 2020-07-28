@@ -2,17 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { BsSkipEndFill, BsSkipStartFill } from 'react-icons/bs';
 import { FaRandom, FaRegPauseCircle, FaRegPlayCircle } from 'react-icons/fa';
 import { FiRepeat } from 'react-icons/fi';
-import { Player } from '../../../entities/player';
 import { PlayerContext } from '../../../providers/player-context';
-import { PLAY_TRACK } from '../../../reducers/player-reducer';
+import { PlayerActionType } from '../../../reducers/player-reducer';
 import { InputEvent } from '../../../types/input-event.type';
 import { Container } from './styles';
 
 export function TrackControls() {
-  const [player, dispatch]: [
-    Player,
-    (action: { type: string; trackIndex: number }) => void
-  ] = useContext(PlayerContext);
+  const [player, dispatch] = useContext(PlayerContext);
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -43,14 +39,20 @@ export function TrackControls() {
     const { currentPlayingIndex } = player;
     const prevIndex = Math.max(currentPlayingIndex - 1, 0);
 
-    dispatch({ type: PLAY_TRACK, trackIndex: prevIndex });
+    dispatch({
+      type: PlayerActionType.PLAY_TRACK,
+      payload: { trackIndex: prevIndex },
+    });
   };
 
   const handleNextClick = () => {
     const { currentPlayingIndex, queue } = player;
     const nextIndex = Math.min(currentPlayingIndex + 1, queue.length - 1);
 
-    dispatch({ type: PLAY_TRACK, trackIndex: nextIndex });
+    dispatch({
+      type: PlayerActionType.PLAY_TRACK,
+      payload: { trackIndex: nextIndex },
+    });
   };
 
   const changeProgress = (e: InputEvent) => {

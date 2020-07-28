@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Album } from '../../entities/album';
 import { PlayerContext } from '../../providers/player-context';
-import { CHANGE_QUEUE, PLAY_TRACK } from '../../reducers/player-reducer';
+import { PlayerActionType } from '../../reducers/player-reducer';
 import { PlayableCard } from '../PlayableCard';
 import { Container } from './styles';
 
@@ -14,8 +14,15 @@ export function AlbumCard(props: Props) {
   const [, dispatch] = useContext(PlayerContext);
 
   const handlePlayClick = () => {
-    dispatch({ type: CHANGE_QUEUE, queue: props.album.tracks });
-    dispatch({ type: PLAY_TRACK, trackIndex: 0 });
+    dispatch({
+      type: PlayerActionType.CHANGE_QUEUE,
+      payload: { queue: props.album.tracks },
+    });
+
+    dispatch({
+      type: PlayerActionType.PLAY_TRACK,
+      payload: { trackIndex: 0 },
+    });
   };
 
   return (

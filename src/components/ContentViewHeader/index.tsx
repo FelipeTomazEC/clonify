@@ -3,7 +3,7 @@ import { BsHeart, BsHeartFill, BsThreeDots } from 'react-icons/bs';
 import { useInView } from 'react-intersection-observer';
 import { Track } from '../../entities/track';
 import { PlayerContext } from '../../providers/player-context';
-import { CHANGE_QUEUE, PLAY_TRACK } from '../../reducers/player-reducer';
+import { PlayerActionType } from '../../reducers/player-reducer';
 import {
   ButtonsBar,
   CompactContainer,
@@ -44,12 +44,22 @@ export function ContentViewHeader(props: Props) {
 
   const handlePlayClick = () => {
     if (player.queue !== props.trackQueue) {
-      dispatch({ type: CHANGE_QUEUE, queue: props.trackQueue });
-      dispatch({ type: PLAY_TRACK, trackIndex: 0 });
+      dispatch({
+        type: PlayerActionType.CHANGE_QUEUE,
+        payload: { queue: props.trackQueue },
+      });
+
+      dispatch({
+        type: PlayerActionType.PLAY_TRACK,
+        payload: { trackIndex: 0 },
+      });
+
       return;
     }
 
     const audioTrack = player.currentPlayingAudio;
+    if (!audioTrack) return;
+
     const isPlaying = !audioTrack.paused;
 
     if (isPlaying) {
