@@ -1,19 +1,23 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Playlist } from '../../entities/playlist';
 import { PlayerContext } from '../../providers/player-context';
 import { PlayerActionType } from '../../reducers/player-reducer';
 import { getPlaylistFromAPI } from '../../services/get-playlist-from-api';
 import { PlayableCard } from '../PlayableCard';
 import { Container } from './styles';
 
-export function PlaylistCard({ playlist }) {
-  const { name, description, followersNumber, isLiked, tracks } = playlist;
+interface Props {
+  playlist: Playlist;
+}
+
+export function PlaylistCard(props: Props) {
   const [, dispatch] = useContext(PlayerContext);
 
   const handlePlayClick = () => {
     dispatch({
       type: PlayerActionType.CHANGE_QUEUE,
-      payload: { queue: tracks },
+      payload: { queue: props.playlist.tracks },
     });
 
     dispatch({
@@ -23,19 +27,21 @@ export function PlaylistCard({ playlist }) {
   };
 
   return (
-    <Container onClick={() => getPlaylistFromAPI(playlist.id)}>
+    <Container onClick={() => getPlaylistFromAPI(props.playlist.id)}>
       <PlayableCard
-        coverUrl={playlist.cover}
-        isLiked={isLiked}
+        coverUrl={props.playlist.cover}
+        isLiked={props.playlist.isLiked}
         handlePlayClick={handlePlayClick}
       />
 
-      <NavLink to={`/application/playlists/${playlist.id}`}>
-        <strong className="name">{name}</strong>
+      <NavLink to={`/application/playlists/${props.playlist.id}`}>
+        <strong className="name">{props.playlist.name}</strong>
       </NavLink>
-      <span className="description">{description}</span>
+      <span className="description">{props.playlist.description}</span>
       <span className="followers-number">
-        {followersNumber ? `${followersNumber} Followers` : ''}
+        {props.playlist.followersNumber
+          ? `${props.playlist.followersNumber} Followers`
+          : ''}
       </span>
     </Container>
   );
