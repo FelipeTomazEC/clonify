@@ -12,14 +12,14 @@ export type PlayerAction = {
   [PlayerActionType.PLAY_TRACK]: { trackIndex: number };
 };
 
-const changeQueue = (state: PlayerState, newQueue: Track[]) => {
+const changeQueue = (state: PlayerState, newQueue: Track[]): PlayerState => {
   return {
     ...state,
     queue: newQueue,
   };
 };
 
-const playTrack = (state: PlayerState, trackIndex: number) => {
+const playTrack = (state: PlayerState, trackIndex: number): PlayerState => {
   const previous = state.currentPlayingAudio;
   if (previous) previous.pause();
 
@@ -36,7 +36,7 @@ const playTrack = (state: PlayerState, trackIndex: number) => {
 export const playerReducer = (
   state: PlayerState,
   action: Action<PlayerAction>
-) => {
+): PlayerState => {
   switch (action.type) {
     case PlayerActionType.CHANGE_QUEUE:
       return changeQueue(state, action.payload.queue);
