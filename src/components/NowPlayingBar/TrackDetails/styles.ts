@@ -1,44 +1,51 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
-  display: grid;
-  grid-template-areas:
-    "cover title like"
-    "cover artist-name artist-name";
-  grid-column-gap: 10px;
-  padding: 8px 12px;
+  display: inline-flex;
   align-items: center;
-  justify-content: flex-start;
+  padding: 8px 12px;
   height: 100%;
+  max-height: 72px;
 
   .cover {
-    grid-area: cover;
     width: 48px;
     height: 48px;
+    margin-right: 12px;
   }
 
-  .title,
-  .artist-name {
-    cursor: pointer;
+  .details {
+    overflow: hidden;
+    max-height: 72px;
+    white-space: nowrap;
 
-    :hover {
-      text-decoration: underline;
-      text-underline-position: under;
+    .title-like-wrapper {
+      display: flex;
+      align-items: center;
     }
-  }
 
-  .title {
-    grid-area: title;
-    font-size: 0.93rem;
-    font-weight: 600;
-  }
+    .title-like-wrapper > .title,
+    .artist-name {
+      display: inline-block;
+      max-width: 200px;
+      cursor: pointer;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
-  .artist-name {
-    font-size: 0.8rem;
-    grid-area: artist-name;
-  }
+      :hover {
+        text-decoration: underline;
+        text-underline-position: under;
+      }
+    }
 
-  .like {
-    grid-area: like;
+    .title {
+      font-size: 0.93rem;
+      font-weight: 600;
+      margin-right: 12px;
+    }
+
+    .artist-name {
+      font-size: 0.8rem;
+      display: block;
+    }
   }
 `;

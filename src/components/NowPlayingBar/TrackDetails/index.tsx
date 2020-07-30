@@ -15,9 +15,14 @@ export function TrackDetails(props: Props) {
   return (
     <Container>
       <img src={props.cover} alt="cover" className="cover" />
-      <strong className="title">{props.title}</strong>
-      <span className="artist-name">{props.artist}</span>
-      <LikeIcon className="like" />
+      <div className="details">
+        <div className="title-like-wrapper">
+          <strong className="title">{props.title}</strong>
+          <LikeIcon className="like" />
+        </div>
+
+        <span className="artist-name">{props.artist}</span>
+      </div>
     </Container>
   );
 }
