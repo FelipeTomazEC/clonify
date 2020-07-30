@@ -6,7 +6,7 @@ import { InputEvent } from '../../../types/input-event.type';
 import { Container } from './styles';
 
 interface Props {
-  audio: HTMLAudioElement;
+  audio?: HTMLAudioElement;
   toggleFullScreen: () => void;
 }
 

@@ -1,11 +1,15 @@
-import React, { useContext } from "react";
-import { PlayerContext } from "../../providers/player-context";
-import { AppControls } from "./AppControls";
-import { Container } from "./styles";
-import { TrackControls } from "./TrackControls";
-import { TrackDetails } from "./TrackDetails";
+import React, { useContext } from 'react';
+import { PlayerContext } from '../../providers/player-context';
+import { AppControls } from './AppControls';
+import { Container } from './styles';
+import { TrackControls } from './TrackControls';
+import { TrackDetails } from './TrackDetails';
 
-export function NowPlayingBar({ toggleFullScreen }) {
+interface Props {
+  toggleFullScreen: () => void;
+}
+
+export function NowPlayingBar(props: Props) {
   const [player] = useContext(PlayerContext);
   const { queue, currentPlayingIndex, currentPlayingAudio } = player;
 
@@ -21,12 +25,12 @@ export function NowPlayingBar({ toggleFullScreen }) {
           title={currentTrack.title}
         />
       ) : (
-        <div></div>
+        <div />
       )}
       <TrackControls />
       <AppControls
         audio={currentPlayingAudio}
-        toggleFullScreen={toggleFullScreen}
+        toggleFullScreen={props.toggleFullScreen}
       />
     </Container>
   );
