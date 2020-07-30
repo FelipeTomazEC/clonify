@@ -1,6 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const Container = styled.div`
+interface Props {
+  cover: string;
+}
+
+export const Container = styled.div<Props>`
   background: url(${(props) => props.cover});
   background-size: 180px 180px;
 
