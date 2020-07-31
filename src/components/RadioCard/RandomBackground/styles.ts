@@ -1,6 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const Container = styled.div`
+interface Props {
+  backgroundColor: string;
+}
+
+export const Container = styled.div<Props>`
   display: flex;
   justify-content: center;
   align-items: center;

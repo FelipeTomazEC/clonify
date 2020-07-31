@@ -1,6 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const Container = styled.div`
+interface Props {
+  isArtistRadio: boolean;
+}
+
+export const Container = styled.div<Props>`
   color: #fff;
   position: relative;
   display: flex;
@@ -17,7 +21,7 @@ export const Container = styled.div`
   }
 
   .name {
-    text-transform: ${(props) => (props.isArtistRadio ? "capitalize" : "none")};
+    text-transform: ${(props) => (props.isArtistRadio ? 'capitalize' : 'none')};
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
