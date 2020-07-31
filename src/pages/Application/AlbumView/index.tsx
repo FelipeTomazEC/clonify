@@ -4,26 +4,28 @@ import { FaPlay } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import { AlbumViewHeader } from '../../../components/AlbumViewHeader';
 import { ContentLoadingAnimation } from '../../../components/ContentLoadingAnimation';
+import { Album } from '../../../entities/album';
+import { Track } from '../../../entities/track';
 import { PlayerContext } from '../../../providers/player-context';
 import { PlayerActionType } from '../../../reducers/player-reducer';
-import { getMultipleAlbumsFromAPI } from '../../../services/get-album-from-api';
+import { getAlbumFromAPI } from '../../../services/get-album-from-api';
 import { Container } from './styles';
 
 export function AlbumView() {
-  const { id } = useParams();
-  const [album, setAlbum] = useState(null);
+  const { id } = useParams<{ id: string }>();
+  const [album, setAlbum] = useState<Album>();
   const [player, dispatch] = useContext(PlayerContext);
 
   useEffect(() => {
-    getMultipleAlbumsFromAPI([id])
-      .then(([album]) => setAlbum(album))
+    getAlbumFromAPI(id)
+      .then((album) => setAlbum(album))
       .catch((err) => console.error(err));
   }, [id]);
 
-  const handleTrackClick = (trackIndex) => {
+  const handleTrackClick = (trackIndex: number) => {
     dispatch({
       type: PlayerActionType.CHANGE_QUEUE,
-      payload: { queue: album.tracks },
+      payload: { queue: album ? album.tracks : [] },
     });
 
     dispatch({
@@ -32,15 +34,15 @@ export function AlbumView() {
     });
   };
 
-  const isActive = (track) => {
+  const isActive = (track: Track) => {
     const { queue, currentPlayingIndex } = player;
     const currentTrack = queue[currentPlayingIndex];
 
     return track.id === currentTrack?.id;
   };
 
-  const getTimeFromMilliseconds = (timeInMilliseconds) => {
-    const format2Digit = (value) => `${value}`.padStart(2, '0');
+  const getTimeFromMilliseconds = (timeInMilliseconds: number) => {
+    const format2Digit = (value: number) => `${value}`.padStart(2, '0');
     const timeInSeconds = Math.round(timeInMilliseconds / 1000);
     const hours = Math.floor(timeInSeconds / 3600);
     const minutes = Math.floor((timeInSeconds % 3600) / 60);
@@ -53,7 +55,7 @@ export function AlbumView() {
 
   return (
     <Container>
-      {album === null ? (
+      {album === undefined ? (
         <ContentLoadingAnimation className="loading-animation" />
       ) : (
         <Fragment>
@@ -75,7 +77,10 @@ export function AlbumView() {
 
               <tbody>
                 {album.tracks.map((track, index) => (
-                  <tr key={track.id} active={isActive(track).toString()}>
+                  <tr
+                    key={track.id}
+                    {...{ active: isActive(track).toString() }}
+                  >
                     <td className="col-play-button">
                       <span>{index + 1}</span>
                       <button onClick={() => handleTrackClick(index)}>
