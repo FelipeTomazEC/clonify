@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StickySentinel = styled.div`
   display: block;
@@ -25,8 +25,10 @@ export const Container = styled.div`
       font-size: 3.3rem;
     }
   }
+`;
 
-  .wrapper[stuck="true"] {
+export const StuckContainer = styled(Container)`
+  .wrapper {
     animation: background 300ms forwards;
 
     > .title {
