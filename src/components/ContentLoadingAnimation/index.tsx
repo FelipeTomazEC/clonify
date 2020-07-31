@@ -4,7 +4,7 @@ import animation from '../../assets/lf30_editor_ve3Bf2.json';
 import { Container } from './styles';
 
 interface Props {
-  className: string;
+  className?: string;
 }
 export function ContentLoadingAnimation(props: Props) {
   const options = {

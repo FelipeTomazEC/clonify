@@ -1,11 +1,12 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { ContentLoadingAnimation } from "../../../../components/ContentLoadingAnimation";
-import { GenreAndMoodCard } from "../../../../components/GenreAndMoodCard";
-import { getGenresFromAPI } from "../../../../services/get-genres-from-api";
-import { Container } from "./styles";
+import React, { Fragment, useEffect, useState } from 'react';
+import { ContentLoadingAnimation } from '../../../../components/ContentLoadingAnimation';
+import { GenreAndMoodCard } from '../../../../components/GenreAndMoodCard';
+import { GenreAndMood } from '../../../../entities/genre-and-mood';
+import { getGenresFromAPI } from '../../../../services/get-genres-from-api';
+import { Container } from './styles';
 
 export function GenresAndMoods() {
-  const [genres, setGenres] = useState(null);
+  const [genres, setGenres] = useState<GenreAndMood[]>();
 
   useEffect(() => {
     getGenresFromAPI()
@@ -15,7 +16,7 @@ export function GenresAndMoods() {
 
   return (
     <Container>
-      {genres === null ? (
+      {genres === undefined ? (
         <ContentLoadingAnimation />
       ) : (
         <Fragment>
@@ -26,7 +27,9 @@ export function GenresAndMoods() {
                 <GenreAndMoodCard
                   cover={genre.cover}
                   name={genre.name}
-                  onClick={() => alert(`Click on ${genre.id}`)}
+                  onClick={() =>
+                    alert(`Sorry! This functionality was not implemented yet.`)
+                  }
                 />
               </li>
             ))}
