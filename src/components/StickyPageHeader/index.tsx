@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import { Container, StickySentinel, StuckContainer } from './styles';
 
 interface Props {
-  children: ReactNode;
+  children?: ReactNode;
   title: string;
 }
 

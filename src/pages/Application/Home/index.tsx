@@ -1,17 +1,19 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AlbumCard } from "../../../components/AlbumCard";
-import { PlaylistCard } from "../../../components/PlaylistCard";
-import { PodcastCard } from "../../../components/PodcastCard";
-import { StickyPageHeader } from "../../../components/StickyPageHeader";
-import { Album } from "../../../entities/album";
-import { UserPlaylistsContext } from "../../../providers/user-playlists-context";
-import { getRecentPlayedFromAPI } from "../../../services/get-recent-played-from-api";
-import { getUserFollowedPodcasts } from "../../../services/get-user-followed-podcasts";
-import { Container } from "./styles";
+import React, { useContext, useEffect, useState } from 'react';
+import { AlbumCard } from '../../../components/AlbumCard';
+import { PlaylistCard } from '../../../components/PlaylistCard';
+import { PodcastCard } from '../../../components/PodcastCard';
+import { StickyPageHeader } from '../../../components/StickyPageHeader';
+import { Album } from '../../../entities/album';
+import { Playlist } from '../../../entities/playlist';
+import { Podcast } from '../../../entities/podcast';
+import { UserPlaylistsContext } from '../../../providers/user-playlists-context';
+import { getRecentPlayedFromAPI } from '../../../services/get-recent-played-from-api';
+import { getUserFollowedPodcasts } from '../../../services/get-user-followed-podcasts';
+import { Container } from './styles';
 
-export function Home({ userId }) {
-  const [recentPlayed, setRecentPlayed] = useState([]);
-  const [podcasts, setPodcasts] = useState([]);
+export function Home() {
+  const [recentPlayed, setRecentPlayed] = useState<(Playlist | Album)[]>([]);
+  const [podcasts, setPodcasts] = useState<Podcast[]>([]);
   const playlists = useContext(UserPlaylistsContext);
 
   useEffect(() => {
@@ -19,7 +21,7 @@ export function Home({ userId }) {
     getRecentPlayedFromAPI().then((response) => setRecentPlayed(response));
   }, []);
 
-  const makeCard = (item) =>
+  const makeCard = (item: Album | Playlist) =>
     item instanceof Album ? (
       <AlbumCard album={item} />
     ) : (
