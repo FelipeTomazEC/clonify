@@ -5,14 +5,16 @@ import { RiCalendar2Line } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
 import { ContentLoadingAnimation } from '../../../components/ContentLoadingAnimation';
 import { PlaylistViewHeader } from '../../../components/PlaylistViewHeader';
+import { Playlist } from '../../../entities/playlist';
+import { Track } from '../../../entities/track';
 import { PlayerContext } from '../../../providers/player-context';
 import { PlayerActionType } from '../../../reducers/player-reducer';
 import { getPlaylistFromAPI } from '../../../services/get-playlist-from-api';
 import { Container } from './styles';
 
 export function PlaylistView() {
-  const { id } = useParams();
-  const [playlist, setPlaylist] = useState(null);
+  const { id } = useParams<{ id: string }>();
+  const [playlist, setPlaylist] = useState<Playlist>();
   const [player, dispatch] = useContext(PlayerContext);
 
   useEffect(() => {
@@ -21,7 +23,9 @@ export function PlaylistView() {
       .catch((err) => console.error(err));
   }, [id]);
 
-  const handleTrackClick = (track) => {
+  const handleTrackClick = (track: Track) => {
+    if (!playlist) return;
+
     const trackIndex = playlist.tracks.indexOf(track);
 
     dispatch({
@@ -35,22 +39,25 @@ export function PlaylistView() {
     });
   };
 
-  const isActive = (track) => {
+  const isActive = (track: Track) => {
     const { queue, currentPlayingIndex } = player;
     const currentTrack = queue[currentPlayingIndex];
 
     return track.id === currentTrack?.id;
   };
 
-  const getTracksWithoutDuplicates = (tracks) => [
-    ...tracks
-      .reduce((acc, track) => acc.set(track.id, track), new Map())
-      .values(),
-  ];
+  const removeDuplicates = (tracks: Track[]) => {
+    const trackMap = tracks.reduce(
+      (map, track) => map.set(track.id, track),
+      new Map<string, Track>()
+    );
+
+    return [...trackMap.values()];
+  };
 
   return (
     <Container>
-      {playlist === null ? (
+      {playlist === undefined ? (
         <ContentLoadingAnimation className="loading-animation" />
       ) : (
         <Fragment>
@@ -70,8 +77,11 @@ export function PlaylistView() {
               </thead>
 
               <tbody>
-                {getTracksWithoutDuplicates(playlist.tracks).map((track) => (
-                  <tr key={track.id} active={isActive(track).toString()}>
+                {removeDuplicates(playlist.tracks).map((track) => (
+                  <tr
+                    key={track.id}
+                    {...{ active: isActive(track).toString() }}
+                  >
                     <td className="col-play-button">
                       <button onClick={() => handleTrackClick(track)}>
                         {isActive(track) ? (
