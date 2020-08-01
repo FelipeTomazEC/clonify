@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from "react";
-import FullScreen from "react-full-screen";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { FriendsActivityFeed } from "../../components/FriendsActivityFeed";
-import { Header } from "../../components/Header";
-import { LeftSideBar } from "../../components/LeftSideBar";
-import { NowPlayingBar } from "../../components/NowPlayingBar";
-import { PlayerProvider } from "../../providers/player-context";
-import { UserPlaylistsProvider } from "../../providers/user-playlists-context";
-import { getCurrentUserInfoFromAPI } from "../../services/get-current-user-data-from-api";
-import { AlbumView } from "./AlbumView";
-import { Browse } from "./Browse";
-import { Home } from "./Home";
-import { PlaylistView } from "./PlaylistView";
-import { Radio } from "./Radio";
-import { Container } from "./styles";
+import React, { useEffect, useState } from 'react';
+import FullScreen from 'react-full-screen';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { ContentLoadingAnimation } from '../../components/ContentLoadingAnimation';
+import { FriendsActivityFeed } from '../../components/FriendsActivityFeed';
+import { Header } from '../../components/Header';
+import { LeftSideBar } from '../../components/LeftSideBar';
+import { NowPlayingBar } from '../../components/NowPlayingBar';
+import { User } from '../../entities/user';
+import { PlayerProvider } from '../../providers/player-context';
+import { UserPlaylistsProvider } from '../../providers/user-playlists-context';
+import { getCurrentUserInfoFromAPI } from '../../services/get-current-user-data-from-api';
+import { AlbumView } from './AlbumView';
+import { Browse } from './Browse';
+import { Home } from './Home';
+import { PlaylistView } from './PlaylistView';
+import { Radio } from './Radio';
+import { Container, LoadingContainer } from './styles';
 
 export function Application() {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState<User>();
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   useEffect(() => {
@@ -27,7 +29,11 @@ export function Application() {
 
   const toggleFullScreen = () => setIsFullScreen(!isFullScreen);
 
-  return (
+  return user === undefined ? (
+    <LoadingContainer>
+      <ContentLoadingAnimation />
+    </LoadingContainer>
+  ) : (
     <BrowserRouter>
       <FullScreen
         enabled={isFullScreen}
@@ -47,10 +53,7 @@ export function Application() {
               </aside>
               <main className="content">
                 <Switch>
-                  <Route
-                    path="/application/home"
-                    render={(props) => <Home {...props} userId={user.id} />}
-                  />
+                  <Route path="/application/home" component={Home} />
                   <Route path="/application/browse" component={Browse} />
                   <Route path="/application/radio" component={Radio} />
                   <Route
