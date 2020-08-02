@@ -1,13 +1,13 @@
-import React from "react";
-import { Redirect } from "react-router-dom";
-import Logo from "../../assets/logo.svg";
-import SpotifyLogo from "../../assets/spotify-logo.svg";
-import { getSpotifyOAuthURL, isLogged } from "../../services/authentication";
-import { Container } from "./styles";
+import React from 'react';
+import { Redirect } from 'react-router-dom';
+import Logo from '../../assets/logo.svg';
+import SpotifyLogo from '../../assets/spotify-logo.svg';
+import { getSpotifyOAuthURL, isLogged } from '../../services/authentication';
+import { Container } from './styles';
 
 export function Login() {
   return isLogged() ? (
-    <Redirect to={{ pathname: "/application/home" }} />
+    <Redirect to={{ pathname: '/application/home' }} />
   ) : (
     <Container>
       <div className="hero">
