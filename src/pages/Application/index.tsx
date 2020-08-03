@@ -10,6 +10,7 @@ import { User } from '../../entities/user';
 import { PlayerProvider } from '../../providers/player-context';
 import { UserPlaylistsProvider } from '../../providers/user-playlists-context';
 import { getCurrentUserInfoFromAPI } from '../../services/get-current-user-data-from-api';
+import { AlbumLibrary } from './AlbumLibrary';
 import { AlbumView } from './AlbumView';
 import { Browse } from './Browse';
 import { Home } from './Home';
@@ -61,6 +62,10 @@ export function Application() {
                     component={PlaylistView}
                   />
                   <Route path="/application/albums/:id" component={AlbumView} />
+                  <Route
+                    path="/application/libraries/albums"
+                    component={AlbumLibrary}
+                  />
                 </Switch>
               </main>
             </UserPlaylistsProvider>

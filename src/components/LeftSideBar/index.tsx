@@ -9,23 +9,22 @@ import { Container } from './styles';
 export function LeftSideBar() {
   const playlists = useContext<Playlist[]>(UserPlaylistsContext);
 
-  const libraries = [
-    'Made For You',
-    'Recently Played',
-    'Liked Songs',
-    'Albums',
-    'Artists',
-    'Podcasts',
-  ];
+  const libraries = ['Albums'];
 
   return (
     <Container>
       <Navigator />
       <div className="list-container">
         <LinkList title="Your Library">
-          {libraries.map((l) => (
-            <li key={l}>
-              <span>{l}</span>
+          {libraries.map((lib) => (
+            <li key={lib}>
+              <NavLink
+                to={`/application/libraries/${lib
+                  .replace(' ', '-')
+                  .toLowerCase()}`}
+              >
+                {lib}
+              </NavLink>
             </li>
           ))}
         </LinkList>
