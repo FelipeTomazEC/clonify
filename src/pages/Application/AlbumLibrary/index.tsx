@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { AlbumCard } from '../../../components/AlbumCard';
+import { FilterBar } from '../../../components/FilterBar';
 import { StickyPageHeader } from '../../../components/StickyPageHeader';
 import { Album } from '../../../entities/album';
 import { getUserAlbumsLibrary } from '../../../services/get-user-albums-library';
@@ -7,6 +8,7 @@ import { AlbumList, Container } from './styles';
 
 export function AlbumLibrary() {
   const [userSavedAlbums, setUserSavedAlbums] = useState<Album[]>([]);
+  const [filter, setFilter] = useState('');
 
   const loadAlbums = () => {
     const offset = userSavedAlbums.length;
@@ -25,17 +27,27 @@ export function AlbumLibrary() {
     const containerHeight = e.currentTarget.clientHeight;
     const hasUserViewedAllAlbums = scrollHeight - current === containerHeight;
 
-    if (hasUserViewedAllAlbums) {
+    if (hasUserViewedAllAlbums && filter.length === 0) {
       loadAlbums();
     }
   };
 
+  const filterFunction = (name: string) =>
+    !!name.toLowerCase().match(filter.toLowerCase());
+
+  const albums =
+    filter === ''
+      ? userSavedAlbums
+      : userSavedAlbums.filter((a) => filterFunction(a.name));
+
   return (
     <Container onScroll={onScrollHandler}>
-      <StickyPageHeader title="Albums" />
+      <StickyPageHeader title="Albums">
+        <FilterBar value={filter} onChange={(text) => setFilter(text)} />
+      </StickyPageHeader>
 
       <AlbumList>
-        {userSavedAlbums.map((album) => (
+        {albums.map((album) => (
           <li key={album.id}>
             <AlbumCard album={album} />
           </li>
