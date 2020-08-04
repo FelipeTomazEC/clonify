@@ -13,7 +13,7 @@ export const Container = styled.div`
   z-index: 10000;
 
   > * {
-    padding-left: 30px;
+    padding: 0 30px;
   }
 
   .wrapper {
