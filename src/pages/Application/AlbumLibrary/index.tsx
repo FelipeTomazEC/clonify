@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { AlbumCard } from '../../../components/AlbumCard';
 import { FilterBar } from '../../../components/FilterBar';
+import { ObservableScrollContainer } from '../../../components/ObservableScrollContainer';
 import { StickyPageHeader } from '../../../components/StickyPageHeader';
 import { Album } from '../../../entities/album';
 import { getUserAlbumsLibrary } from '../../../services/get-user-albums-library';
-import { AlbumList, Container } from './styles';
+import { AlbumList, Wrapper } from './styles';
 
 export function AlbumLibrary() {
   const [userSavedAlbums, setUserSavedAlbums] = useState<Album[]>([]);
@@ -21,38 +22,33 @@ export function AlbumLibrary() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => loadAlbums(), []);
 
-  const onScrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
-    const scrollHeight = e.currentTarget.scrollHeight;
-    const current = e.currentTarget.scrollTop;
-    const containerHeight = e.currentTarget.clientHeight;
-    const hasUserViewedAllAlbums = scrollHeight - current === containerHeight;
-
-    if (hasUserViewedAllAlbums && filter.length === 0) {
+  const onScrollHandler = (scrolledPercentage: number) => {
+    if (scrolledPercentage === 100 && filter === '') {
       loadAlbums();
     }
   };
 
-  const filterFunction = (name: string) =>
-    !!name.toLowerCase().match(filter.toLowerCase());
+  const filterFunction = (album: Album) =>
+    !!album.name.toLowerCase().match(filter.toLowerCase());
 
   const albums =
-    filter === ''
-      ? userSavedAlbums
-      : userSavedAlbums.filter((a) => filterFunction(a.name));
+    filter === '' ? userSavedAlbums : userSavedAlbums.filter(filterFunction);
 
   return (
-    <Container onScroll={onScrollHandler}>
-      <StickyPageHeader title="Albums">
-        <FilterBar value={filter} onChange={(text) => setFilter(text)} />
-      </StickyPageHeader>
+    <ObservableScrollContainer dispatch={onScrollHandler}>
+      <Wrapper>
+        <StickyPageHeader title="Albums">
+          <FilterBar value={filter} onChange={(text) => setFilter(text)} />
+        </StickyPageHeader>
 
-      <AlbumList>
-        {albums.map((album) => (
-          <li key={album.id}>
-            <AlbumCard album={album} />
-          </li>
-        ))}
-      </AlbumList>
-    </Container>
+        <AlbumList>
+          {albums.map((album) => (
+            <li key={album.id}>
+              <AlbumCard album={album} />
+            </li>
+          ))}
+        </AlbumList>
+      </Wrapper>
+    </ObservableScrollContainer>
   );
 }
