@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AlbumCard } from '../../../components/AlbumCard';
+import { CardCarousel } from '../../../components/CardCarousel';
 import { PlaylistCard } from '../../../components/PlaylistCard';
 import { PodcastCard } from '../../../components/PodcastCard';
 import { StickyPageHeader } from '../../../components/StickyPageHeader';
@@ -33,30 +34,25 @@ export function Home() {
       <StickyPageHeader title="Home" />
       <main>
         <section>
-          <h2 className="label">Recently Played</h2>
-          <ul>
-            {recentPlayed.map((el) => (
-              <li key={el.id}>{makeCard(el)}</li>
-            ))}
-          </ul>
+          <CardCarousel
+            title="Recent Played"
+            elements={recentPlayed}
+            cardRender={makeCard}
+          />
         </section>
         <section>
-          <h2 className="label">Your Playlists</h2>
-          <ul>
-            {playlists.map((el) => (
-              <li key={el.id}>{makeCard(el)}</li>
-            ))}
-          </ul>
+          <CardCarousel
+            title="Your Playlists"
+            elements={playlists}
+            cardRender={makeCard}
+          />
         </section>
         <section>
-          <h2 className="label">Your Top Podcasts</h2>
-          <ul>
-            {podcasts.map((el) => (
-              <li key={el.id}>
-                <PodcastCard podcast={el} />
-              </li>
-            ))}
-          </ul>
+          <CardCarousel
+            title="Your Playlists"
+            elements={podcasts}
+            cardRender={(podcast) => <PodcastCard podcast={podcast} />}
+          />
         </section>
       </main>
     </Container>

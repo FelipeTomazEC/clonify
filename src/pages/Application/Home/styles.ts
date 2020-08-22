@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
   max-height: 100%;
@@ -18,31 +18,7 @@ export const Container = styled.div`
     padding: 15px 15px 0px 30px;
 
     section {
-      margin-top: 32px;
-
-      .label {
-        font-size: 1.1rem;
-        color: #fff;
-        margin-bottom: 15px;
-        border-bottom: rgba(255, 255, 240, 0.2) solid 1px;
-      }
-
-      ul {
-        height: fit-content;
-        max-width: 100%;
-        display: flex;
-        list-style: none;
-        align-items: flex-start;
-        overflow-x: auto;
-
-        li {
-          margin: 0 11px;
-          max-width: 180px;
-          :first-child {
-            margin-left: 0px;
-          }
-        }
-      }
+      margin-top: 24px;
     }
   }
 `;
