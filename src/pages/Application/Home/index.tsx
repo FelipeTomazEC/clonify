@@ -49,7 +49,7 @@ export function Home() {
         </section>
         <section>
           <CardCarousel
-            title="Your Playlists"
+            title="Your Top Podcasts"
             elements={podcasts}
             cardRender={(podcast) => <PodcastCard podcast={podcast} />}
           />
