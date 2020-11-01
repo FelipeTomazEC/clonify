@@ -38,7 +38,9 @@ export function AlbumLibrary() {
     <ObservableScrollContainer dispatch={onScrollHandler}>
       <Wrapper>
         <StickyPageHeader title="Albums">
-          <FilterBar value={filter} onChange={(text) => setFilter(text)} />
+          {() => (
+            <FilterBar value={filter} onChange={(text) => setFilter(text)} />
+          )}
         </StickyPageHeader>
 
         <AlbumList>

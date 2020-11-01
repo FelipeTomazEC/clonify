@@ -1,17 +1,17 @@
-import React from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
-import { BrowseNavigator } from "../../../components/BrowseNavigator";
-import { StickyPageHeader } from "../../../components/StickyPageHeader";
-import { GenresAndMoods } from "./GenresAndMoods";
-import { NotImplementedYet } from "./NotImplementedYet";
-import { Container } from "./styles";
+import React from 'react';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowseNavigator } from '../../../components/BrowseNavigator';
+import { StickyPageHeader } from '../../../components/StickyPageHeader';
+import { GenresAndMoods } from './GenresAndMoods';
+import { NotImplementedYet } from './NotImplementedYet';
+import { Container } from './styles';
 
 export function Browse() {
   return (
     <BrowserRouter>
       <Container>
         <StickyPageHeader title="Browse">
-          <BrowseNavigator />
+          {() => <BrowseNavigator />}
         </StickyPageHeader>
         <main>
           <Switch>

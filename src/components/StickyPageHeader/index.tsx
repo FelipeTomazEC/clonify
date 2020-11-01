@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import { Container, StickySentinel, StuckContainer } from './styles';
 
 interface Props {
-  children?: ReactNode;
+  children?: (stuck: boolean) => ReactNode;
   title: string;
 }
 
@@ -17,7 +17,7 @@ export function StickyPageHeader(props: Props) {
       <ContentContainer>
         <div className="wrapper">
           <h1 className="title">{props.title}</h1>
-          {props.children}
+          {props.children ? props.children(!isSentinelInView) : ''}
         </div>
       </ContentContainer>
     </React.Fragment>
