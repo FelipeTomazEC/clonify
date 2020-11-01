@@ -9,7 +9,7 @@ import { Container } from './styles';
 export function LeftSideBar() {
   const playlists = useContext<Playlist[]>(UserPlaylistsContext);
 
-  const libraries = ['Albums'];
+  const libraries = ['Albums', 'Liked Songs'];
 
   return (
     <Container>
