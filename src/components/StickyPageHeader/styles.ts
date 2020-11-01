@@ -11,6 +11,7 @@ export const Container = styled.div`
   position: sticky;
   font-weight: 800;
   z-index: 10000;
+  min-height: 100px;
 
   > * {
     padding: 0 30px;
