@@ -9,6 +9,7 @@ interface Props {
 
 export interface PlayerContextState {
   queue: Track[];
+  //TODO - Remove current playing index property
   currentPlayingIndex: number;
   currentPlayingAudio?: HTMLAudioElement;
 }
