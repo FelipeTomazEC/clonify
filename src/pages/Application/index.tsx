@@ -14,6 +14,7 @@ import { AlbumLibrary } from './AlbumLibrary';
 import { AlbumView } from './AlbumView';
 import { Browse } from './Browse';
 import { Home } from './Home';
+import { LikedSongsLibrary } from './LikedSongsLibrary';
 import { PlaylistView } from './PlaylistView';
 import { Radio } from './Radio';
 import { Container, LoadingContainer } from './styles';
@@ -65,6 +66,10 @@ export function Application() {
                   <Route
                     path="/application/libraries/albums"
                     component={AlbumLibrary}
+                  />
+                  <Route
+                    path="/application/libraries/liked-songs"
+                    component={LikedSongsLibrary}
                   />
                 </Switch>
               </main>
