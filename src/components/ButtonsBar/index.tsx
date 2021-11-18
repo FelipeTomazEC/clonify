@@ -1,10 +1,27 @@
 import React from 'react';
-import {Container, PlayButton} from './styles'
+import { BsHeart, BsHeartFill, BsThreeDots } from 'react-icons/bs';
+import { Container, PlayButton, CircledButton} from './styles'
 
-export function ButtonsBar() {
+interface Props {
+  isLiked: boolean;
+  label: "Play" | "Pause";
+  onClick: () => void;
+}
+
+export function ButtonsBar(props: Props) {
+  const LikeIcon = props.isLiked ? BsHeartFill : BsHeart;
+
   return (
       <Container>
-        <PlayButton>Play</PlayButton>
+        <PlayButton onClick={props.onClick}>
+          {props.label}
+        </PlayButton>
+        <CircledButton> 
+          <LikeIcon size={15}/>
+        </CircledButton>
+        <CircledButton> 
+          <BsThreeDots size={15}/>
+        </CircledButton>
       </Container>
   );
 }

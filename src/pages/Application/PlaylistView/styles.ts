@@ -26,14 +26,23 @@ export const Container = styled.div`
 `;
 
 export const Wrapper = styled.div<StickyContainerContent>`
-  position: ${props => props.isStuck ? 'sticky' : 'absolute'};
-  display: flex;
+  display: grid;
+  grid-template-columns: ${props => props.isStuck ? '1fr 5fr 1fr 1fr' : '1fr 2fr'};
+  grid-template-rows: ${props => props.isStuck ? '1fr' : '1fr 2fr 1fr'};
+  grid-template-areas: ${props => props.isStuck
+    ? `"cover info . buttons"`
+    : `"cover ."
+       "cover info"
+       "cover buttons"`
+  };
   align-items: center;
+  position: ${props => props.isStuck ? 'sticky' : 'absolute'};
   top: 0;
   width: 100%;
   height: ${props => props.isStuck ? '70px' : '250px'};
   background-color: red;
   animation: ${props => props.isStuck ? 'collapsing' : 'expanding'} 300ms forwards;
+  
 
   @keyframes collapsing {
     from {
@@ -71,12 +80,13 @@ export const Cover = styled.img<StickyContainerContent>`
   width: ${props => props.isStuck ? '40px' : '220px'};
   height: ${props => props.isStuck ? '40px' : '220px'};
   margin: 15px 30px;
+  grid-area: cover;
 `;
 
 export const Info = styled.div<StickyContainerContent>`
   color: #939090;
   font-size: 0.95rem;
-  
+  grid-area: info;
   ${props => props.isStuck ? `
     .description, .label, .tracks-info, .time-info, .owner {
       display: none;
