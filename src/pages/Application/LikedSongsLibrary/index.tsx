@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { FilterBar } from '../../../components/FilterBar';
 import { ObservableScrollContainer } from '../../../components/ObservableScrollContainer';
 import { PlaylistTrackTable } from '../../../components/PlaylistTrackTable';
 import { StickyPageHeader } from '../../../components/StickyPageHeader';
-import { usePlayer } from '../../../hooks/use-player';
 import { getUserTracksLibrary } from '../../../services/get-user-tracks-library';
 import { PlayButton, Wrapper } from './styles';
 import { PlayerStatus } from "../../../constants/player-status.enum";
+import { usePlayer } from '../../../providers/player-context';
+import { Track } from '../../../entities/track';
 
 export function LikedSongsLibrary() {
-    const {tracks, setTracks, activeTrackId, playTrack, status} = usePlayer([]);
+    const {playTrack, replaceQueue, playerStatus, currentTrack, queue} = usePlayer();
     const [filter, setFilter] = useState<string>('');
+    const [tracks, setTracks] = useState<Track[]>([]);
 
     const loadLibrary = async () => {
         const offset = tracks.length;
         try {
-            const tracks = await getUserTracksLibrary(offset);
-            setTracks(prev => prev.concat(tracks));
+            const response = await getUserTracksLibrary(offset);
+            setTracks((tracks) => tracks.concat(response));
         } catch (err) {
             console.error(err);
         }
@@ -28,12 +30,22 @@ export function LikedSongsLibrary() {
         }
     };
 
-    const playPauseHandler = () => {
-        if (tracks.length === 0) return;
-        const track = tracks.find(t => t.id === activeTrackId) ?? tracks[0];
+    const isTracksInQueue = useMemo(() =>
+        tracks.every(track => queue.some(t => t.id === track.id)) ?? false
+    , [tracks, queue]);
 
-        playTrack(track);
+    const playPauseHandler = () => {
+        if(!isTracksInQueue) {
+            replaceQueue(tracks);
+        }
+
+        const trackToPlay = isTracksInQueue ? currentTrack : tracks[0];
+        playTrack(trackToPlay!);
     }
+
+    const label = !isTracksInQueue || playerStatus !== PlayerStatus.PLAYING
+        ? 'Play'
+        : 'Pause';
 
     useEffect(() => {
         loadLibrary();
@@ -46,16 +58,12 @@ export function LikedSongsLibrary() {
                 <StickyPageHeader title="Liked Songs">
                     {(stuck) => (
                         <PlayButton stuck={stuck} onClick={playPauseHandler}>
-                            { status === PlayerStatus.PLAYING ? 'Pause' : 'Play' }
+                          {label}
                         </PlayButton>
                     )}
                 </StickyPageHeader>
                 <FilterBar value={filter} onChange={(text) => setFilter(text)}/>
-                <PlaylistTrackTable
-                    tracks={tracks}
-                    activeTrackId={activeTrackId}
-                    playTrack={playTrack}
-                />
+                <PlaylistTrackTable tracks={tracks}/>
             </Wrapper>
         </ObservableScrollContainer>
     );

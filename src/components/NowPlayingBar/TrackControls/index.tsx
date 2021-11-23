@@ -1,69 +1,48 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BsSkipEndFill, BsSkipStartFill } from 'react-icons/bs';
 import { FaRandom, FaRegPauseCircle, FaRegPlayCircle } from 'react-icons/fa';
 import { FiRepeat } from 'react-icons/fi';
-import { PlayerContext } from '../../../providers/player-context';
-import { PlayerActionType } from '../../../reducers/player-reducer';
+import { PlayerStatus } from '../../../constants/player-status.enum';
+import { usePlayer } from '../../../providers/player-context';
 import { InputEvent } from '../../../types/input-event.type';
 import { Container } from './styles';
 
 export function TrackControls() {
-  const [player, dispatch] = useContext(PlayerContext);
-
+  const { queue, currentTrack, playTrack, currentTrackDuration, addProgressListener } = usePlayer();
+  const { playerStatus, goTo } = usePlayer();
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
 
   useEffect(() => {
-    const audioTrack = player.currentPlayingAudio;
-    if (audioTrack) {
-      audioTrack.ontimeupdate = () => setCurrentTime(audioTrack.currentTime);
-      audioTrack.onloadedmetadata = () => setDuration(audioTrack.duration);
-
-      audioTrack.play();
-    }
-
-    return () => {
-      audioTrack?.pause();
-      return;
-    };
-  }, [player.currentPlayingAudio]);
+    addProgressListener((progress) => setCurrentTime(progress));
+  }, [addProgressListener]);
 
   const handlePlayPauseClick = () => {
-    const audioTrack = player.currentPlayingAudio;
-    const isPlaying = !audioTrack?.paused;
+    if(queue.length === 0 || !currentTrack) {
+      return;  
+    }
 
-    return isPlaying ? audioTrack?.pause() : audioTrack?.play();
+    playTrack(currentTrack ?? queue[0]);
   };
 
   const handlePrevClick = () => {
-    const { currentPlayingIndex } = player;
-    const prevIndex = Math.max(currentPlayingIndex - 1, 0);
-
-    dispatch({
-      type: PlayerActionType.PLAY_TRACK,
-      payload: { trackIndex: prevIndex },
-    });
+    const currentIndex = queue.findIndex(t => t.id === currentTrack?.id);
+    const prevIndex = Math.max(currentIndex - 1, 0);
+    playTrack(queue[prevIndex]);
   };
 
   const handleNextClick = () => {
-    const { currentPlayingIndex, queue } = player;
-    const nextIndex = Math.min(currentPlayingIndex + 1, queue.length - 1);
-
-    dispatch({
-      type: PlayerActionType.PLAY_TRACK,
-      payload: { trackIndex: nextIndex },
-    });
+    const currentIndex = queue.findIndex(t => t.id === currentTrack?.id);
+    const nextIndex = Math.min(currentIndex + 1, queue.length - 1);
+    playTrack(queue[nextIndex]);
   };
 
   const changeProgress = (e: InputEvent) => {
-    const audioTrack = player.currentPlayingAudio as HTMLAudioElement;
     const newProgress = e.target.valueAsNumber;
-    audioTrack.currentTime = newProgress;
+    goTo(newProgress);
   };
 
   const restartFromTheBeginning = () => {
-    const audioTrack = player.currentPlayingAudio as HTMLAudioElement;
-    audioTrack.currentTime = 0;
+    goTo(0);
   };
 
   const getTimeInMinutes = (timeInSeconds: number) => {
@@ -74,9 +53,7 @@ export function TrackControls() {
   };
 
   const PlayPauseButtonIcon =
-    player.currentPlayingAudio?.paused || !player.currentPlayingAudio
-      ? FaRegPlayCircle
-      : FaRegPauseCircle;
+    playerStatus === PlayerStatus.PLAYING ? FaRegPauseCircle : FaRegPlayCircle;
 
   return (
     <Container>
@@ -107,10 +84,10 @@ export function TrackControls() {
           className="progress-bar"
           id="progress-bar"
           value={currentTime}
-          max={duration}
+          max={currentTrackDuration}
           onChange={changeProgress}
         />
-        <span className="time">{getTimeInMinutes(duration)}</span>
+        <span className="time">{getTimeInMinutes(currentTrackDuration)}</span>
       </div>
     </Container>
   );

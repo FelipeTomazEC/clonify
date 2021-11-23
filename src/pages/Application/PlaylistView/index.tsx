@@ -1,33 +1,41 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import {useParams} from 'react-router-dom';
 import {ContentLoadingAnimation} from '../../../components/ContentLoadingAnimation';
 import {Playlist} from '../../../entities/playlist';
 import {getPlaylistFromAPI} from '../../../services/get-playlist-from-api';
 import {Container, Wrapper, StickyGuard, Header, Cover, Info, Label, Name, Description, Owner } from './styles';
-import {usePlayer} from "../../../hooks/use-player";
 import {PlaylistTrackTable} from "../../../components/PlaylistTrackTable";
 import {ApplicationStatus} from "../../../constants/application-status.enum";
 import {useInView} from "react-intersection-observer";
 import {Time} from "../../../utils/time";
 import {TimeWithUnitsFormatter} from "../../../utils/time-with-units-formatter";
 import {ButtonsBar} from "../../../components/ButtonsBar";
-import { PlayerStatus } from '../../../constants/player-status.enum';
-
+import {usePlayer} from '../../../providers/player-context';
 
 export function PlaylistView() {
   const {id} = useParams<{ id: string }>();
   const [ref, isGuardInView] = useInView({ threshold: 0 });
   const [playlist, setPlaylist] = useState<Playlist>();
   const [appStatus, setAppStatus] = useState<ApplicationStatus>(ApplicationStatus.LOADING);
-  const { playTrack, tracks, setTracks, activeTrackId, status } = usePlayer([]);
+  const {queue, replaceQueue, playTrack, currentTrack } = usePlayer();
+
   const time = Time.parseMillisecondsToTime(
-      tracks.reduce((acc, cur) => acc + cur.duration, 0)
+      (playlist?.tracks ?? []).reduce((acc, cur) => acc + cur.duration, 0)
   );
   const formatter = new TimeWithUnitsFormatter();
 
+  const isPlaylistInQueue = useMemo(() => 
+    playlist?.tracks.every(track => queue.some(t => t.id === track.id)) ?? false, 
+    [playlist, queue]
+  );
+
   const playButtonClick = () => {
-    const current = tracks.find(t => t.id === activeTrackId) ?? tracks[0];
-    playTrack(current);
+    if (!isPlaylistInQueue) {
+      replaceQueue(playlist?.tracks!);
+    }
+
+    const trackToPlay = isPlaylistInQueue ? currentTrack : playlist?.tracks[0];
+    playTrack(trackToPlay!);
   }
 
   useEffect(() => {
@@ -35,7 +43,6 @@ export function PlaylistView() {
       try {
         const playlist = await getPlaylistFromAPI(id);
         setPlaylist(playlist);
-        setTracks(playlist.tracks);
         setAppStatus(ApplicationStatus.READY);
       } catch (err) {
         console.error(err);
@@ -44,7 +51,7 @@ export function PlaylistView() {
     };
 
     fetchPlaylist();
-  }, [id, setTracks]);
+  }, [id, replaceQueue]);
 
   return (
       <Container>
@@ -67,16 +74,17 @@ export function PlaylistView() {
                           <Owner className='owner'>Created by &nbsp;
                               <strong>{playlist?.ownerName}</strong>
                           </Owner>
-                          <span className='tracks-info'>{tracks.length} {tracks.length === 1 ? 'song' : 'songs'}, &nbsp;</span>
+                          <span className='tracks-info'>{playlist?.tracks.length} &nbsp; 
+                            {playlist?.tracks.length === 1 ? 'song' : 'songs'}, &nbsp;</span>
                           <span className='time-info'>{formatter.format(time)}</span>
                       </Info>
                       <ButtonsBar
-                        label={status === PlayerStatus.PLAYING ? 'Pause' : 'Play'} 
+                        isTrackListInQueue={isPlaylistInQueue}
                         isLiked={playlist!.isLiked} 
                         onClick={playButtonClick}/>
                   </Wrapper>
               </Header>
-              <PlaylistTrackTable tracks={tracks} playTrack={playTrack} activeTrackId={activeTrackId}/>
+              <PlaylistTrackTable tracks={playlist?.tracks ?? []}/>
           </>
         }
       </Container>

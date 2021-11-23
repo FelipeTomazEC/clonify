@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface StickyContentProps {
+  isStuck: boolean;
+}
+
 export const Container = styled.div`
   position: relative;
   max-width: 100%;
@@ -22,130 +26,128 @@ export const Container = styled.div`
     transform: translateY(-50%);
   }
 
-  .tracks-section {
-    margin-top: 270px;
-    display: block;
+  table {
     width: 100%;
-    color: #fff;
-    padding: 0px 32px;
-    z-index: 5;
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
+    margin-top: 150px;
+  }
+`;
 
-      th,
-      td {
-        border-bottom: #282828 solid 1px;
-        text-align: left;
-        vertical-align: center;
-        max-width: 0px;
-        height: 40px;
-        padding: 0px 15px;
-      }
+export const StickSentinel = styled.div`
+  width: 100%;
+  height: 120px;
+  position: relative;
+  z-index: 1000;
+  background-color: transparent;
+`;
 
-      th {
-        text-transform: uppercase;
-        font-weight: 200;
-        color: #b2afae;
-        letter-spacing: 1px;
-      }
+export const StickContainer = styled.div<StickyContentProps>`
+  position: ${(props) => props.isStuck ? 'sticky' : 'absolute'};
+  top: 0;
+  left: 0;
+  width: 100%;
+  animation: ${props => props.isStuck ? 'collapsing' : 'expanding'} 300ms forwards;
+  
 
-      td {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-      }
-
-      tr {
-        :hover {
-          background-color: #282828;
-
-          > .col-play-button,
-          .col-more-button {
-            button {
-              display: inline-block;
-            }
-          }
-
-          > .col-play-button {
-            span {
-              display: none;
-            }
-          }
-        }
-      }
-
-      tr[active='true'] {
-        color: #1db954;
-
-        .col-play-button {
-          span {
-            display: none;
-          }
-          button {
-            display: block;
-          }
-        }
-      }
-
-      .col-like-button,
-      .col-play-button,
-      .col-more-button {
-        padding: 0;
-        width: 35px;
-        height: 100%;
-        text-align: center;
-
-        button {
-          background-color: transparent;
-          border: none;
-          line-height: 50%;
-          outline: none;
-          color: #fff;
-          width: 35px;
-          height: 35px;
-
-          :hover {
-            transform: scale(1.1);
-          }
-        }
-      }
-
-      .col-play-button {
-        position: relative;
-
-        button {
-          background-color: #181817;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translateX(-50%) translateY(-50%);
-          border-radius: 50%;
-          border: #fff 1px solid;
-          width: 28px;
-          height: 28px;
-
-          :hover {
-            transform: translateX(-50%) translateY(-50%) scale(1.1);
-          }
-        }
-      }
-
-      .col-play-button,
-      .col-more-button {
-        button {
-          display: none;
-        }
-      }
-
-      .col-title {
-        width: 45%;
-      }
-
-      .col-artist {
-        width: 30%;
-      }
+  @keyframes collapsing {
+    from {
+      background-color: transparent;
+    }
+    to {
+      background-color: #0C0C0B;
+      border-bottom: rgba(178, 175, 174, 0.2) solid 1px;
     }
   }
+
+  @keyframes expanding {
+    from {
+      background-color: #0C0C0B;
+      border-bottom: rgba(178, 175, 174, 0.2) solid 1px;
+    }
+    to {
+      background-color: transparent;
+    }
+  }
+`;
+
+export const Cover = styled.img<StickyContentProps>`
+  width: ${props => props.isStuck ? '50px' : '220px'};
+  height: ${props => props.isStuck ? '50px' : '220px'};
+  grid-area: cover;
+`;
+
+
+
+export const AlbumName = styled.h1`
+  
+`;
+
+export const Label = styled.h3`
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 200;
+  grid-area: label;
+`;
+
+export const Info = styled.span`
+  color: #939090;
+  font-size: 0.95rem;
+`;
+
+export const YearInfo = styled(Info)`
+  ::after {
+    content: '';
+    margin: 0 0.3rem;
+    display: inline-block;
+    height: 1px;
+    width: 1px;
+    background-color: #939090;
+    border: #939090 solid 2px;
+    border-radius: 100%;
+  }
+` 
+
+export const ArtistInfo = styled(Info)`
+  strong {
+    color: #fff;
+    font-weight: 400;
+  }
+`;
+
+export const AlbumInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const InfoWrapper = styled.div<StickyContentProps>`
+  grid-area: info;
+  align-self: ${(props) => props.isStuck ? 'inherit' : 'flex-end'};
+
+  ${Info}, ${Label} {
+    display: ${(props) => props.isStuck ? 'none' : 'inline'};
+  }
+  
+  ${AlbumName} {
+    font-size: ${(props) => props.isStuck ? '2rem' : '3rem'};
+  }
+`;
+
+export const Header = styled.header<StickyContentProps>`
+  height: ${(props) => props.isStuck ? 80 : 270}px;
+  width: 100%;
+  padding: 0 24px;
+  display: grid;
+  align-items: center;
+  color: #fff;
+
+  .buttons {
+    grid-area: buttons;
+  }
+
+  grid-template-columns: ${(props) => props.isStuck ? '1fr 6fr 1fr 1fr' : '1fr 2fr'};
+  grid-template-areas: ${(props) => props.isStuck
+    ? `"cover info . buttons"`
+    : `"cover info"
+      "cover buttons"`
+  };
 `;

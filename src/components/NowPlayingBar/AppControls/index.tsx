@@ -1,31 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BsVolumeMute, BsVolumeUp } from 'react-icons/bs';
 import { FaExpandAlt } from 'react-icons/fa';
 import { MdImportantDevices, MdQueueMusic } from 'react-icons/md';
+import { usePlayer } from '../../../providers/player-context';
 import { InputEvent } from '../../../types/input-event.type';
 import { Container } from './styles';
 
 interface Props {
-  audio?: HTMLAudioElement;
   toggleFullScreen: () => void;
 }
 
-export function AppControls({ audio, toggleFullScreen }: Props) {
-  const [volume, setVolume] = useState(0.5);
-  const [isMuted, setIsMuted] = useState(false);
-
-  const VolumeIcon = volume === 0 || isMuted ? BsVolumeMute : BsVolumeUp;
+export function AppControls({ toggleFullScreen }: Props) {
+  const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [volume, setVolume] = useState<number>(0.5);
+  const { changeVolume } = usePlayer();
 
   useEffect(() => {
-    if (audio) audio.volume = isMuted ? 0 : volume;
-  }, [isMuted, audio, volume]);
+    if(isMuted) {
+      changeVolume(0);
+    } else {
+      changeVolume(volume);
+    }
+  }, [isMuted, changeVolume, volume]);
 
-  const changeVolume = (e: InputEvent) => {
+  const VolumeIcon = isMuted ? BsVolumeMute : BsVolumeUp;
+
+  const handleChangeVolume = (e: InputEvent) => {
     const volume = e.target.valueAsNumber / 100;
+    changeVolume(volume);
     setVolume(volume);
 
     if (volume > 0) {
       setIsMuted(false);
+    }
+
+    if(volume === 0) {
+      setIsMuted(true);
     }
   };
 
@@ -49,7 +59,7 @@ export function AppControls({ audio, toggleFullScreen }: Props) {
         min={0}
         max={100}
         value={volume * 100}
-        onChange={changeVolume}
+        onChange={handleChangeVolume}
       />
       <button onClick={toggleFullScreen}>
         <FaExpandAlt size={18} />

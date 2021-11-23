@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { PlayerContext } from '../../providers/player-context';
+import React from 'react';
+import { usePlayer } from '../../providers/player-context';
 import { AppControls } from './AppControls';
 import { Container } from './styles';
 import { TrackControls } from './TrackControls';
@@ -10,10 +10,7 @@ interface Props {
 }
 
 export function NowPlayingBar(props: Props) {
-  const [player] = useContext(PlayerContext);
-  const { queue, currentPlayingIndex, currentPlayingAudio } = player;
-
-  const currentTrack = queue[currentPlayingIndex];
+  const { currentTrack } = usePlayer();
 
   return (
     <Container>
@@ -29,7 +26,6 @@ export function NowPlayingBar(props: Props) {
       )}
       <TrackControls />
       <AppControls
-        audio={currentPlayingAudio}
         toggleFullScreen={props.toggleFullScreen}
       />
     </Container>

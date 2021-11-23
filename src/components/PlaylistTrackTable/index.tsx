@@ -3,6 +3,7 @@ import { BsHeartFill, BsThreeDots, BsVolumeUp } from 'react-icons/bs';
 import { FaPlay } from 'react-icons/fa';
 import { RiCalendar2Line } from 'react-icons/ri';
 import { Track } from '../../entities/track';
+import { usePlayer } from '../../providers/player-context';
 import {
   ArtistName,
   Button,
@@ -15,12 +16,21 @@ import {
 
 interface Props {
   tracks: Track[];
-  activeTrackId?: string;
-  playTrack: (track: Track) => void;
 }
 
-export const PlaylistTrackTable: React.FC<Props> = (props: Props) => {
+
+export const PlaylistTrackTable: React.FC<Props> = ({ tracks }) => {
   const [selectedRowIndex, setSelectedRowIndex] = useState<number>(-1);
+  const { queue, playTrack, currentTrack, replaceQueue } = usePlayer();
+
+  const handleTrackClick = (track: Track) => () => {
+    const isAlbumOnQueue = queue.some(t => t.id === track.id);
+    if(!isAlbumOnQueue) {
+      replaceQueue(tracks);
+    }
+
+    playTrack(track);
+  }
 
   return (
     <Table>
@@ -47,9 +57,9 @@ export const PlaylistTrackTable: React.FC<Props> = (props: Props) => {
       </Header>
 
       <tbody>
-        {props.tracks.map((track, index) => {
+        {tracks.map((track, index) => {
           const { id, title, artists } = track;
-          const isActive = props.activeTrackId === id;
+          const isActive = currentTrack?.id === track.id;
           const isSelected = selectedRowIndex === index;
           const PlayIcon = isActive ? (
             <BsVolumeUp size={15} />
@@ -66,7 +76,7 @@ export const PlaylistTrackTable: React.FC<Props> = (props: Props) => {
             >
               <td>
                 <PlayButton
-                  onClick={() => props.playTrack(track)}
+                  onClick={handleTrackClick(track)}
                   className="play-button"
                 >
                   {PlayIcon}

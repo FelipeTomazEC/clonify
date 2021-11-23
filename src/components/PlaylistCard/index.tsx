@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Playlist } from '../../entities/playlist';
-import { PlayerContext } from '../../providers/player-context';
-import { PlayerActionType } from '../../reducers/player-reducer';
+import { usePlayer } from '../../providers/player-context';
 import { getPlaylistFromAPI } from '../../services/get-playlist-from-api';
 import { PlayableCard } from '../PlayableCard';
 import { Container } from './styles';
@@ -11,36 +10,29 @@ interface Props {
   playlist: Playlist;
 }
 
-export function PlaylistCard(props: Props) {
-  const [, dispatch] = useContext(PlayerContext);
+export function PlaylistCard({ playlist }: Props) {
+  const { replaceQueue, playTrack } = usePlayer();
 
   const handlePlayClick = () => {
-    dispatch({
-      type: PlayerActionType.CHANGE_QUEUE,
-      payload: { queue: props.playlist.tracks },
-    });
-
-    dispatch({
-      type: PlayerActionType.PLAY_TRACK,
-      payload: { trackIndex: 0 },
-    });
+    replaceQueue(playlist.tracks);
+    playTrack(playlist.tracks[0]);
   };
 
   return (
-    <Container onClick={() => getPlaylistFromAPI(props.playlist.id)}>
+    <Container onClick={() => getPlaylistFromAPI(playlist.id)}>
       <PlayableCard
-        coverUrl={props.playlist.cover}
-        isLiked={props.playlist.isLiked}
+        coverUrl={playlist.cover}
+        isLiked={playlist.isLiked}
         handlePlayClick={handlePlayClick}
       />
 
-      <NavLink to={`/application/playlists/${props.playlist.id}`}>
-        <strong className="name">{props.playlist.name}</strong>
+      <NavLink to={`/application/playlists/${playlist.id}`}>
+        <strong className="name">{playlist.name}</strong>
       </NavLink>
-      <span className="description">{props.playlist.description}</span>
+      <span className="description">{playlist.description}</span>
       <span className="followers-number">
-        {props.playlist.followersNumber
-          ? `${props.playlist.followersNumber} Followers`
+        {playlist.followersNumber
+          ? `${playlist.followersNumber} Followers`
           : ''}
       </span>
     </Container>

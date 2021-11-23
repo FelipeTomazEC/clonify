@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Album } from '../../entities/album';
-import { PlayerContext } from '../../providers/player-context';
-import { PlayerActionType } from '../../reducers/player-reducer';
+import { usePlayer } from '../../providers/player-context';
 import { PlayableCard } from '../PlayableCard';
 import { Container } from './styles';
 
@@ -10,35 +9,29 @@ interface Props {
   album: Album;
 }
 
-export function AlbumCard(props: Props) {
-  const [, dispatch] = useContext(PlayerContext);
+export function AlbumCard({ album }: Props) {
+  const {replaceQueue, playTrack} = usePlayer();
 
   const handlePlayClick = () => {
-    dispatch({
-      type: PlayerActionType.CHANGE_QUEUE,
-      payload: { queue: props.album.tracks },
-    });
-
-    dispatch({
-      type: PlayerActionType.PLAY_TRACK,
-      payload: { trackIndex: 0 },
-    });
+    const { tracks } = album;
+    replaceQueue(tracks);
+    playTrack(tracks[0]);
   };
 
   return (
     <Container>
       <PlayableCard
-        coverUrl={props.album.cover}
+        coverUrl={album.cover}
         isLiked={false}
         handlePlayClick={handlePlayClick}
       />
 
-      <NavLink to={`/application/albums/${props.album.id}`}>
-        <strong className="name">{props.album.name}</strong>
+      <NavLink to={`/application/albums/${album.id}`}>
+        <strong className="name">{album.name}</strong>
       </NavLink>
 
       <span className="artist">
-        {props.album.artists.map((a) => a.name).join(', ')}
+        {album.artists.map((a) => a.name).join(', ')}
       </span>
     </Container>
   );
