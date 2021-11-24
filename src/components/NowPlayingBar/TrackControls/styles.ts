@@ -30,12 +30,12 @@ export const Container = styled.div`
     justify-content: space-between;
     width: 500px;
 
-    input {
-      margin: 0 16px;
-    }
-
     .time {
       min-width: 1.5rem;
+    }
+
+    input[type="range"] {
+      margin: 0px 16px;
     }
   }
 `;

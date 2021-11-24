@@ -22,23 +22,4 @@ export const Container = styled.div`
       color: #b2afae;
     }
   }
-
-  input[type="range"] {
-    appearance: none;
-    height: 4px;
-    border-radius: 2px;
-    background-color: #b2afae;
-    color: #fff;
-    outline: none;
-
-    ::-webkit-slider-thumb {
-      appearance: none;
-      fill: red;
-      width: 15px;
-      height: 15px;
-      border-radius: 50%;
-      background: #1ed760;
-      cursor: pointer;
-    }
-  }
 `;

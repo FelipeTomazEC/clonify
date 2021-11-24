@@ -9,4 +9,8 @@ export const Container = styled.div`
     height: 100%;
     margin: 4px;
   }
+
+  input[type="range"] {
+    width: 150px;
+  }
 `;

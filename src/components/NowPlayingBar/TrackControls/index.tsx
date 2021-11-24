@@ -4,8 +4,8 @@ import { FaRandom, FaRegPauseCircle, FaRegPlayCircle } from 'react-icons/fa';
 import { FiRepeat } from 'react-icons/fi';
 import { PlayerStatus } from '../../../constants/player-status.enum';
 import { usePlayer } from '../../../providers/player-context';
-import { InputEvent } from '../../../types/input-event.type';
 import { Container } from './styles';
+import { InputRange } from '../../InputRange';
 
 export function TrackControls() {
   const { queue, currentTrack, playTrack, currentTrackDuration, addProgressListener } = usePlayer();
@@ -34,11 +34,6 @@ export function TrackControls() {
     const currentIndex = queue.findIndex(t => t.id === currentTrack?.id);
     const nextIndex = Math.min(currentIndex + 1, queue.length - 1);
     playTrack(queue[nextIndex]);
-  };
-
-  const changeProgress = (e: InputEvent) => {
-    const newProgress = e.target.valueAsNumber;
-    goTo(newProgress);
   };
 
   const restartFromTheBeginning = () => {
@@ -79,13 +74,10 @@ export function TrackControls() {
       </div>
       <div className="progress-bar">
         <span className="time">{getTimeInMinutes(currentTime)}</span>
-        <input
-          type="range"
-          className="progress-bar"
-          id="progress-bar"
-          value={currentTime}
-          max={currentTrackDuration}
-          onChange={changeProgress}
+        <InputRange 
+          maxValue={currentTrackDuration} 
+          value={currentTime} 
+          onChange={(value) => goTo(value)}
         />
         <span className="time">{getTimeInMinutes(currentTrackDuration)}</span>
       </div>

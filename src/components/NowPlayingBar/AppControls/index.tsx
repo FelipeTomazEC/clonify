@@ -3,7 +3,7 @@ import { BsVolumeMute, BsVolumeUp } from 'react-icons/bs';
 import { FaExpandAlt } from 'react-icons/fa';
 import { MdImportantDevices, MdQueueMusic } from 'react-icons/md';
 import { usePlayer } from '../../../providers/player-context';
-import { InputEvent } from '../../../types/input-event.type';
+import { InputRange } from '../../InputRange';
 import { Container } from './styles';
 
 interface Props {
@@ -25,10 +25,9 @@ export function AppControls({ toggleFullScreen }: Props) {
 
   const VolumeIcon = isMuted ? BsVolumeMute : BsVolumeUp;
 
-  const handleChangeVolume = (e: InputEvent) => {
-    const volume = e.target.valueAsNumber / 100;
-    changeVolume(volume);
-    setVolume(volume);
+  const handleChangeVolume = (volume: number) => {
+    changeVolume(volume / 100);
+    setVolume(volume / 100);
 
     if (volume > 0) {
       setIsMuted(false);
@@ -52,13 +51,9 @@ export function AppControls({ toggleFullScreen }: Props) {
       <button onClick={muteOrUnmute}>
         <VolumeIcon size={25} />
       </button>
-      <input
-        type="range"
-        id="volume"
-        className="volume-slider"
-        min={0}
-        max={100}
-        value={volume * 100}
+      <InputRange
+        maxValue={100}
+        value={isMuted ? 0 : volume * 100}
         onChange={handleChangeVolume}
       />
       <button onClick={toggleFullScreen}>
