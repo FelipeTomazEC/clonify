@@ -18,7 +18,6 @@ interface Props {
   tracks: Track[];
 }
 
-
 export const PlaylistTrackTable: React.FC<Props> = ({ tracks }) => {
   const [selectedRowIndex, setSelectedRowIndex] = useState<number>(-1);
   const { queue, playTrack, currentTrack, replaceQueue } = usePlayer();

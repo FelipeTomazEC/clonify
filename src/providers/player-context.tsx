@@ -16,26 +16,12 @@ interface PlayerContextData {
 
 export const PlayerContext = createContext<PlayerContextData>({} as PlayerContextData);
 
-export const PlayerProvider: React.FC = ({children}) => {
+export const PlayerProvider: React.FC = ({children}) => { 
   const [queue, setQueue] = useState<Track[]>([]);
   const [currentTrack, setCurrentTrack] = useState<Track>();
   const [playerStatus, setPlayerStatus] = useState<PlayerStatus>(PlayerStatus.STOPPED);
   const [audioElement, setAudioElement] = useState<HTMLAudioElement>();
   const [currentTrackDuration, setCurrentTrackDuration] = useState<number>(0);
-
-  useEffect(() => {
-    if(audioElement) {      
-      audioElement.onpause = () => setPlayerStatus(PlayerStatus.PAUSED);
-      audioElement.onplay = () => setPlayerStatus(PlayerStatus.PLAYING);
-      audioElement.onloadedmetadata  = () => setCurrentTrackDuration(audioElement.duration);
-      audioElement.play();
-    }
-
-    return () => {
-      audioElement?.pause();
-      audioElement?.remove();
-    }
-  }, [audioElement]);
 
   const goTo = useCallback((time: number) => {
     if(audioElement) {
@@ -57,21 +43,46 @@ export const PlayerProvider: React.FC = ({children}) => {
 
   const replaceQueue = useCallback((tracks: Track[]) => setQueue(tracks), []);
 
-  const playTrack = (track: Track) => {
+  const playTrack = useCallback((track: Track) => {
     if(!currentTrack || currentTrack.id !== track.id) {
-      const audio = new Audio(track.sourceUrl);
-      setCurrentTrack(track);
-      setAudioElement(audio);
+      return setCurrentTrack(track);
     }
 
-    if(playerStatus === PlayerStatus.PLAYING) {
-      audioElement?.pause();
+    if (audioElement?.paused) {
+      audioElement.play();
     } else {
-      audioElement?.play();
+      audioElement?.pause();
     }
-  }
+  }, [audioElement, currentTrack]);
 
+  useEffect(() => {
+    if(currentTrack) {
+      const audio = new Audio(currentTrack.sourceUrl);
+      setAudioElement(audio);
+      setPlayerStatus(PlayerStatus.PLAYING);
+      audio.play();
+    }
+  }, [currentTrack]);
 
+  useEffect(() => {
+    if(audioElement) {     
+      audioElement.onpause = () => setPlayerStatus(PlayerStatus.PAUSED);
+      audioElement.onplay = () => setPlayerStatus(PlayerStatus.PLAYING);
+      audioElement.onloadedmetadata  = () => setCurrentTrackDuration(audioElement.duration);
+      audioElement.onended = () => {
+          const nextTrackIndex = queue.findIndex(t => t.id === currentTrack?.id);
+          const nextTrack = queue[nextTrackIndex + 1];
+          if (nextTrack) {
+            playTrack(nextTrack);
+          }
+      };
+    }
+
+    return () => {
+      audioElement?.pause();
+      audioElement?.remove();
+    }
+  }, [audioElement, currentTrack, playTrack, queue]);
 
   return (
     <PlayerContext.Provider value={{
