@@ -2,6 +2,7 @@ import faker from 'faker';
 import { FriendActivity } from '../entities/friend-activity';
 import { Playlist } from '../entities/playlist';
 import { User } from '../entities/user';
+import { getFakeAvatarImage } from './get-fake-avatar-image';
 import { getPlaylistFromAPI } from './get-playlist-from-api';
 import { fetchFromApi } from './spotify-web-api-service';
 
@@ -15,8 +16,8 @@ interface TopPlaylistsEndpointResponse {
 
 function createFakeFriend(): User {
   const name = faker.name.findName();
-  const avatarUrl = faker.internet.avatar();
   const id = faker.random.uuid();
+  const avatarUrl = getFakeAvatarImage();
 
   return new User({ name, avatarUrl, id });
 }

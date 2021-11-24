@@ -1,5 +1,6 @@
 import faker from 'faker';
 import { RadioStation } from '../entities/radio-station';
+import { getFakeAvatarImage } from './get-fake-avatar-image';
 
 function createFakeRadioStation() {
   const type = faker.random.boolean() ? 'artist' : 'song';
@@ -8,9 +9,9 @@ function createFakeRadioStation() {
     type === 'artist'
       ? faker.name.findName()
       : faker.random.words(Math.floor(Math.random() * 3 + 1));
-  const coverImage1 = faker.internet.avatar();
-  const coverImage2 = faker.internet.avatar();
-  const coverImage3 = faker.internet.avatar();
+  const coverImage1 = getFakeAvatarImage();
+  const coverImage2 = getFakeAvatarImage();
+  const coverImage3 = getFakeAvatarImage();
 
   return new RadioStation({
     type,
