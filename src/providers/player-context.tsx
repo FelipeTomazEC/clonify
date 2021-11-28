@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState, createContext, useCallback } from 'react';
 import { PlayerStatus } from '../constants/player-status.enum';
 import { Track } from '../entities/track';
+import { shuffle } from '../utils/shuffle';
 
 interface PlayerContextData {
   queue: Track[];
@@ -12,6 +13,8 @@ interface PlayerContextData {
   addProgressListener: (cb: (progress: number) => void) => void;
   changeVolume: (volume: number) => void;
   currentTrackDuration: number;
+  toggleShuffle: () => void;
+  isShuffleActive: boolean;
 }
 
 export const PlayerContext = createContext<PlayerContextData>({} as PlayerContextData);
@@ -22,6 +25,8 @@ export const PlayerProvider: React.FC = ({children}) => {
   const [playerStatus, setPlayerStatus] = useState<PlayerStatus>(PlayerStatus.STOPPED);
   const [audioElement, setAudioElement] = useState<HTMLAudioElement>();
   const [currentTrackDuration, setCurrentTrackDuration] = useState<number>(0);
+  const [isShuffleActive, setIsShuffleActive] = useState<boolean>(false);
+  const [shuffledQueue, setShuffledQueue] = useState<Track[]>([]);
 
   const goTo = useCallback((time: number) => {
     if(audioElement) {
@@ -41,10 +46,17 @@ export const PlayerProvider: React.FC = ({children}) => {
     }
   }, [audioElement]);
 
-  const replaceQueue = useCallback((tracks: Track[]) => setQueue(tracks), []);
+  const replaceQueue = useCallback((tracks: Track[]) => {
+    setQueue(tracks);
+    if(isShuffleActive) {
+      setShuffledQueue(shuffle(tracks));
+    }
+  }, [isShuffleActive]);
 
   const playTrack = useCallback((track: Track) => {
     if(!currentTrack || currentTrack.id !== track.id) {
+      audioElement?.pause();
+      audioElement?.remove();
       return setCurrentTrack(track);
     }
 
@@ -54,6 +66,20 @@ export const PlayerProvider: React.FC = ({children}) => {
       audioElement?.pause();
     }
   }, [audioElement, currentTrack]);
+
+  const toggleShuffle = () => {
+    const isNecessaryToShuffle = !isShuffleActive;
+    if(isNecessaryToShuffle) {
+      const shuffled = shuffle(queue.filter(t => t.id !== currentTrack?.id));
+      if(currentTrack) {
+        shuffled.unshift(currentTrack);
+      }
+
+      setShuffledQueue(shuffled);
+    }
+
+    setIsShuffleActive(!isShuffleActive);
+  }
 
   useEffect(() => {
     if(currentTrack) {
@@ -70,31 +96,29 @@ export const PlayerProvider: React.FC = ({children}) => {
       audioElement.onplay = () => setPlayerStatus(PlayerStatus.PLAYING);
       audioElement.onloadedmetadata  = () => setCurrentTrackDuration(audioElement.duration);
       audioElement.onended = () => {
-          const nextTrackIndex = queue.findIndex(t => t.id === currentTrack?.id);
-          const nextTrack = queue[nextTrackIndex + 1];
+          const trackQueue = isShuffleActive ? shuffledQueue : queue;
+          const nextTrackIndex = trackQueue.findIndex(t => t.id === currentTrack?.id);
+          const nextTrack = trackQueue[nextTrackIndex + 1];
           if (nextTrack) {
             playTrack(nextTrack);
           }
       };
     }
-
-    return () => {
-      audioElement?.pause();
-      audioElement?.remove();
-    }
-  }, [audioElement, currentTrack, playTrack, queue]);
+  }, [audioElement, currentTrack, isShuffleActive, playTrack, queue, shuffledQueue]);
 
   return (
     <PlayerContext.Provider value={{
       changeVolume,
-      queue, 
+      queue: isShuffleActive ? shuffledQueue : queue,
       replaceQueue, 
-      playTrack, 
+      playTrack,
       currentTrack, 
       playerStatus, 
       goTo,
       addProgressListener,
-      currentTrackDuration
+      currentTrackDuration,
+      toggleShuffle,
+      isShuffleActive
     }}
     >
       {children}

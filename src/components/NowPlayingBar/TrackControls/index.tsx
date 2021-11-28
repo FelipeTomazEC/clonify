@@ -8,7 +8,9 @@ import { Container } from './styles';
 import { InputRange } from '../../InputRange';
 
 export function TrackControls() {
-  const { queue, currentTrack, playTrack, currentTrackDuration, addProgressListener } = usePlayer();
+  const { queue, currentTrack, playTrack } = usePlayer();
+  const { currentTrackDuration, addProgressListener } = usePlayer();
+  const { toggleShuffle, isShuffleActive } = usePlayer();
   const { playerStatus, goTo } = usePlayer();
   const [currentTime, setCurrentTime] = useState(0);
 
@@ -54,7 +56,10 @@ export function TrackControls() {
     <Container>
       <div className="buttons">
         <button>
-          <FaRandom size={14} />
+          <FaRandom 
+            size={14} 
+            onClick={toggleShuffle} 
+            color={isShuffleActive ? "#1ed760" : "inherit"}/>
         </button>
         <button
           onClick={restartFromTheBeginning}
