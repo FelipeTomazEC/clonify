@@ -15,6 +15,8 @@ interface PlayerContextData {
   currentTrackDuration: number;
   toggleShuffle: () => void;
   isShuffleActive: boolean;
+  toggleRepeat: () => void;
+  isRepeatEnable: boolean;
 }
 
 export const PlayerContext = createContext<PlayerContextData>({} as PlayerContextData);
@@ -27,6 +29,7 @@ export const PlayerProvider: React.FC = ({children}) => {
   const [currentTrackDuration, setCurrentTrackDuration] = useState<number>(0);
   const [isShuffleActive, setIsShuffleActive] = useState<boolean>(false);
   const [shuffledQueue, setShuffledQueue] = useState<Track[]>([]);
+  const [isRepeatEnable, setIsRepeatEnable] = useState<boolean>(false);
 
   const goTo = useCallback((time: number) => {
     if(audioElement) {
@@ -81,6 +84,8 @@ export const PlayerProvider: React.FC = ({children}) => {
     setIsShuffleActive(!isShuffleActive);
   }
 
+  const toggleRepeat = () => setIsRepeatEnable(!isRepeatEnable);
+
   useEffect(() => {
     if(currentTrack) {
       const audio = new Audio(currentTrack.sourceUrl);
@@ -97,14 +102,18 @@ export const PlayerProvider: React.FC = ({children}) => {
       audioElement.onloadedmetadata  = () => setCurrentTrackDuration(audioElement.duration);
       audioElement.onended = () => {
           const trackQueue = isShuffleActive ? shuffledQueue : queue;
-          const nextTrackIndex = trackQueue.findIndex(t => t.id === currentTrack?.id);
+          const nextTrackIndex = trackQueue.findIndex(t => t.id === currentTrack?.id)
           const nextTrack = trackQueue[nextTrackIndex + 1];
+          if(!nextTrack && isRepeatEnable) {
+            return playTrack(trackQueue[0])
+          }
+
           if (nextTrack) {
             playTrack(nextTrack);
           }
       };
     }
-  }, [audioElement, currentTrack, isShuffleActive, playTrack, queue, shuffledQueue]);
+  }, [audioElement, currentTrack, isRepeatEnable, isShuffleActive, playTrack, queue, shuffledQueue]);
 
   return (
     <PlayerContext.Provider value={{
@@ -118,7 +127,9 @@ export const PlayerProvider: React.FC = ({children}) => {
       addProgressListener,
       currentTrackDuration,
       toggleShuffle,
-      isShuffleActive
+      isShuffleActive,
+      toggleRepeat,
+      isRepeatEnable
     }}
     >
       {children}

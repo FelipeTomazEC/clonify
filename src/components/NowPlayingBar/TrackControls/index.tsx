@@ -12,6 +12,7 @@ export function TrackControls() {
   const { currentTrackDuration, addProgressListener } = usePlayer();
   const { toggleShuffle, isShuffleActive } = usePlayer();
   const { playerStatus, goTo } = usePlayer();
+  const { isRepeatEnable, toggleRepeat } = usePlayer();
   const [currentTime, setCurrentTime] = useState(0);
 
   useEffect(() => {
@@ -34,6 +35,10 @@ export function TrackControls() {
 
   const handleNextClick = () => {
     const currentIndex = queue.findIndex(t => t.id === currentTrack?.id);
+    if(currentIndex + 1 >= queue.length && isRepeatEnable) {
+      return playTrack(queue[0]);
+    }
+    
     const nextIndex = Math.min(currentIndex + 1, queue.length - 1);
     playTrack(queue[nextIndex]);
   };
@@ -74,7 +79,11 @@ export function TrackControls() {
           <BsSkipEndFill size={20} />
         </button>
         <button>
-          <FiRepeat size={14} />
+          <FiRepeat 
+            size={14} 
+            onClick={toggleRepeat}
+            color={isRepeatEnable ? "#1ed760" : "inherit"}
+          />
         </button>
       </div>
       <div className="progress-bar">
